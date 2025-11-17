@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import MovieCard from "../components/MovieCard"
-import { searchMovies, getPopularMovies } from "../services/api";
 import "../css/Home.css"
+import { EmblaCarousel } from "../components/Carousel";
+import { searchMovies, getPopularMovies } from "../services/api";
+
 
 
 function Home() {
@@ -44,7 +45,10 @@ function Home() {
         }
 
     }
-
+    
+    const filteredMovies = movies.filter(movie =>
+        movie.title.toLowerCase().startsWith(searchName.toLowerCase())
+    )
         return (
             <div className="home">
                 <form onSubmit={handleSearch} className="search-form">
@@ -59,17 +63,13 @@ function Home() {
                 </form>
 
                 {error && <p className="error-message">{error}</p>}
+                
 
                 {loading ? (<p className="loading">Loading...</p>) : (
-                <div className="movies-grid">
-                    {movies.map(movie => 
-                    movie.title.toLowerCase().startsWith(searchName) && (
-                    <MovieCard movie={movie} key={movie.id} ></MovieCard>
-                    ))}
+                    <EmblaCarousel movies={filteredMovies} />
+                    )}
                 </div>
-                )}
-            </div>
-    )
-}
+                )
+            }
 
 export default Home;

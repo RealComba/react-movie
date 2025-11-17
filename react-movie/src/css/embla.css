@@ -1,0 +1,30 @@
+.embla {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.embla__viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.embla__container {
+  display: flex;
+  flex-direction: row;
+  touch-action: pan-y;
+}
+
+.embla__slide {
+  position: relative;
+  padding: 20px;
+}
+
+.embla__slide__number {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: white;
+  font-size: 20px;
+  z-index: 2;
+}
