@@ -64,7 +64,7 @@ function Home() {
 
                 {error && <p className="error-message">{error}</p>}
 
-                <p className="font-bold text-2xl">I film più visti</p>
+                <p className="font-bold text-2xl pb-4 text-neutral-200">I film più visti</p>
                 
 
                 {loading ? (<p className="loading">Loading...</p>) : (
