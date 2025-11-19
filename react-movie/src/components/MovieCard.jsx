@@ -12,6 +12,10 @@ function MovieCard({movie}) {
             else addToFavorites(movie)
 
     }
+
+    function playFilm () {
+        console.log(movie.id)
+    }
     
     return (
         <div className="movie-card">
@@ -21,7 +25,7 @@ function MovieCard({movie}) {
                     <div className="overlay-content">
                         <h3 className="font-bold">{movie.title}</h3>
                         <div className="movie-actions">
-                            <button className="btn play" title="Play">▶</button>
+                            <button className="btn play" title="Play" onClick={playFilm}>▶</button>
                             <button className={`btn favorite-btn ${favorite ? "active" : ""}`} onClick={onFavoriteClick}>
                                 ♥︎
                             </button>
