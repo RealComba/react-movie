@@ -1,24 +1,19 @@
-.movie-card {
+
+.movie-poster {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 300px;
-    background-color: rgb(28, 28, 28);
-    padding: 20px;
-    border-radius: 8px;
-    height: 100%;
-    margin-bottom: 10px;
+    justify-content: end;
+    width: 250px;
 }
 
 .movie-poster img{
-    width: 100%;
-    height: 400px;
+    width: 95%;
+    height: 100%;
+    border-radius: 8px;
 }
 
 .favorite-btn {
+    margin: 4px;
     position: absolute;
-    top:  1.5rem;
-    right: 1.5rem;
     border-radius: 50%;
     font-size: 1.5rem;
     color: white;

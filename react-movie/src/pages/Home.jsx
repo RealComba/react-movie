@@ -63,12 +63,15 @@ function Home() {
                 </form>
 
                 {error && <p className="error-message">{error}</p>}
+
+                <p className="font-bold text-2xl">I film più visti</p>
                 
 
                 {loading ? (<p className="loading">Loading...</p>) : (
                     <EmblaCarousel movies={filteredMovies} />
                     )}
                 </div>
+           
                 )
             }
 
