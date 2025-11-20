@@ -35,7 +35,12 @@ function MediaStreaming () {
                 {mediaData.overview}
             </p>
             <div className="flex justify-center pt-20">
-            <video controls width="50%"> <source src={`https://vidsrc.to/embed/movie/tt${id}`}></source></video>
+             <iframe
+            src={`https://vidlink.pro/movie/${id}`}
+            frameborder="0"
+            allowfullscreen
+            className="w-200 h-100"
+            ></iframe>
             </div>
         </div>
     )
