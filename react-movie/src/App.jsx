@@ -6,6 +6,7 @@ import NavBar from "./components/NavBar";
 import { MovieProvider } from "./contexts/MovieContext"
 import { SearchProvider } from "./contexts/SearchContext";
 import Series from "./pages/Series"
+import MediaStreaming from "./pages/MediaStreaming";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/series" element={<Series/>}></Route>
+          <Route path="/watch/:mediaType/:id" element={<MediaStreaming />} />
         </Routes>
       </MovieProvider>
       </SearchProvider>

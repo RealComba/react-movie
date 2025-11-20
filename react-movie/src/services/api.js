@@ -24,3 +24,13 @@ export const searchSeries = async (query) => {
     const data = await response.json()
     return data.results
 };
+
+export async function getMovieById(id) {
+    const res = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=it-IT`);
+    return res.json();
+}
+
+export async function getSeriesById(id) {
+    const res = await fetch(`${BASE_URL}/tv/${id}?api_key=${API_KEY}&language=it-IT`);
+    return res.json();
+}

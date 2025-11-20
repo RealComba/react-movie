@@ -1,7 +1,11 @@
 import "../css/MovieCard.css"
 import { useMovieContext } from "../contexts/MovieContext"
+import { useNavigate } from "react-router-dom";
+
+
 
 function MediaCard({ media }) {
+    const navigate = useNavigate()
     const { isFavorite, addToFavorites, removeFromFavorites } = useMovieContext()
     const favorite = isFavorite(media.id)
 
@@ -12,7 +16,10 @@ function MediaCard({ media }) {
     }
 
     function playMedia() {
-        console.log(media.id)
+        console.log(media)
+        if (media.title) navigate(`/watch/movie/${media.id}`);
+
+        else navigate(`/watch/series/${media.id}`)
     }
     
     return (
