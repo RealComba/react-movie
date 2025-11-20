@@ -1,10 +1,15 @@
 import { Link } from 'react-router-dom'
 import { useSearchContext } from '../contexts/SearchContext'
 import "../css/NavBar.css"
+import { useEffect } from 'react'
 
 function NavBar() {
 
-    const { searchName, setSearchName, handleSearch, setIsSearchingSeries } = useSearchContext()
+    const { searchName, setSearchName, handleSearch, setIsSearchingSeries, isSearchingSeries } = useSearchContext()
+
+    useEffect(() => {
+        
+    })
 
     return (
         <div>
@@ -26,8 +31,12 @@ function NavBar() {
                     onChange={(e) => setSearchName(e.target.value)} 
                     />
                     <button type="submit" className="search-button bg-green-700 px-4 p-1 rounded-lg">Cerca</button>
-                     <button type="button" onClick={() => setIsSearchingSeries(false)}>Film</button>
-                    <button type="button" onClick={() => setIsSearchingSeries(true)}>Serie</button>
+                     <button
+                     className={!isSearchingSeries ? "bg-orange-500 px-4 rounded-lg" : "bg-neutral-950 px-4 rounded-lg"} 
+                      type="button" onClick={() => setIsSearchingSeries(false)}>Film</button>
+                    <button type="button" 
+                     className={!isSearchingSeries ? "bg-neutral-950 px-4 text-black rounded-lg text-white" : "bg-orange-500 px-4 rounded-lg"}
+                    onClick={() => setIsSearchingSeries(true)}>Serie</button>
                 </form>
             </div>
         </div>
