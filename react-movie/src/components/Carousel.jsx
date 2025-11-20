@@ -1,21 +1,17 @@
-import useEmblaCarousel  from 'embla-carousel-react'
-import { useCallback } from 'react'
-import MovieCard from "../components/MovieCard"
-import "../css/embla.css"
+import React from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
+import { useCallback } from 'react';
+import MovieCard from "../components/MovieCard";
+import "../css/embla.css";
 
 export function EmblaCarousel({ movies = [] }) {
-  const slides = Array.isArray(movies) ? movies : []
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true })
+  const slides = Array.isArray(movies) ? movies : [];
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, containScroll: 'trimSnaps' });
 
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev()
-  }, [emblaApi])
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
 
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext()
-  }, [emblaApi])
-
-  if (!slides.length) return null
+  if (!slides.length) return null;
 
   return (
     <section className="embla">
@@ -23,9 +19,9 @@ export function EmblaCarousel({ movies = [] }) {
 
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
-          {slides.map(movie => (
+          {slides.map((movie) => (
             <div className="embla__slide" key={movie.id}>
-              <MovieCard movie={movie} />
+              <MovieCard media={movie} />
             </div>
           ))}
         </div>
@@ -33,5 +29,7 @@ export function EmblaCarousel({ movies = [] }) {
 
       <button className="embla__button embla__button--next" onClick={scrollNext}>›</button>
     </section>
-  )
+  );
 }
+
+export default EmblaCarousel;

@@ -1,31 +1,29 @@
 import "../css/MovieCard.css"
 import { useMovieContext } from "../contexts/MovieContext"
 
-function MovieCard({movie}) {
-
-    const {isFavorite, addToFavorites, removeFromFavorites} = useMovieContext()
-    const favorite = isFavorite(movie.id)
+function MediaCard({ media }) {
+    const { isFavorite, addToFavorites, removeFromFavorites } = useMovieContext()
+    const favorite = isFavorite(media.id)
 
     function onFavoriteClick(e) {
         e.preventDefault()
-        if (favorite) removeFromFavorites(movie.id)
-            else addToFavorites(movie)
-
+        if (favorite) removeFromFavorites(media.id)
+        else addToFavorites(media)
     }
 
-    function playFilm () {
-        console.log(movie.id)
+    function playMedia() {
+        console.log(media.id)
     }
     
     return (
         <div className="movie-card">
             <div className="movie-poster">
-                <img src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`} alt={movie.title} />
+                <img src={`https://image.tmdb.org/t/p/w500${media.backdrop_path}`} alt={media.title} />
                 <div className="movie-overlay">
                     <div className="overlay-content">
-                        <h3 className="font-bold">{movie.title}</h3>
+                        <h3 className="font-bold">{media.title || media.name}</h3>
                         <div className="movie-actions">
-                            <button className="btn play" title="Play" onClick={playFilm}>▶</button>
+                            <button className="btn play" title="Play" onClick={playMedia}>▶</button>
                             <button className={`btn favorite-btn ${favorite ? "active" : ""}`} onClick={onFavoriteClick}>
                                 ♥︎
                             </button>
@@ -36,6 +34,6 @@ function MovieCard({movie}) {
             </div>
         </div>
     )
-} 
+}
 
-export default MovieCard
+export default MediaCard
