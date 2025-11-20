@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import "../css/Home.css";
 import { EmblaCarousel } from "../components/Carousel";
 import { useSearchContext } from "../contexts/SearchContext";
-import MediaCard from "../components/MovieCard";
+import MediaCard from "../components/MediaCard";
 
 function Home() {
   const { searchName, movies, series, error, loading, loadPopularMovies, loadPopularSeries } = useSearchContext();
@@ -30,7 +30,7 @@ function Home() {
       ) : (
         <>
           <EmblaCarousel movies={filteredMovies} />
-          <p className="font-bold text-2xl pb-4 text-neutral-200">Le serie più viste</p>
+          <p className="font-bold text-2xl pb-4 pt-4 text-neutral-200">Le serie più viste</p>
           <EmblaCarousel movies={filteredSeries} />
         </>
       )}

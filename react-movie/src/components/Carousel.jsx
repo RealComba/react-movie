@@ -1,7 +1,7 @@
 import React from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback } from 'react';
-import MovieCard from "../components/MovieCard";
+import MediaCard from "./MediaCard";
 import "../css/embla.css";
 
 export function EmblaCarousel({ movies = [] }) {
@@ -21,7 +21,7 @@ export function EmblaCarousel({ movies = [] }) {
         <div className="embla__container">
           {slides.map((movie) => (
             <div className="embla__slide" key={movie.id}>
-              <MovieCard media={movie} />
+              <MediaCard media={movie} />
             </div>
           ))}
         </div>
