@@ -1,7 +1,7 @@
 import "../css/MovieCard.css"
 import { useMovieContext } from "../contexts/MovieContext"
 import { useNavigate } from "react-router-dom";
-
+import { getSeriesById } from "../services/api"
 
 
 function MediaCard({ media }) {
