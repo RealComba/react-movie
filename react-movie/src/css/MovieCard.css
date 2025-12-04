@@ -12,7 +12,7 @@
     border-radius: 8px;
     flex-direction: column;
     overflow: hidden;
-    width: 250px;
+    width: 180px;
     object-fit: cover;
     display: block;
     transition: transform 300ms ease, filter 300ms ease;

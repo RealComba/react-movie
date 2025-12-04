@@ -25,7 +25,7 @@ function MediaCard({ media }) {
     return (
         <div className="movie-card">
             <div className="movie-poster">
-                <img src={`https://image.tmdb.org/t/p/w500${media.backdrop_path}`} alt={media.title} />
+                <img src={`https://image.tmdb.org/t/p/w500${media.poster_path}`} alt={media.title} />
                 <div className="movie-overlay">
                     <div className="overlay-content">
                         <h3 className="font-bold">{media.title || media.name}</h3>

@@ -33,6 +33,7 @@ function MediaStreaming () {
 
     return (
         <div className="flex flex-col px-[4rem] pt-[2rem]">
+            <img src={`https://image.tmdb.org/t/p/w500${mediaData.backdrop_path}`} alt="" />
             <p className="text-2xl font-bold">{mediaData.title || mediaData.name}</p>
             <p className="text-lg mt-3">{mediaData.overview}</p>
 
