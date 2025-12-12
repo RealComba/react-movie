@@ -1,1 +1,35 @@
 @import "tailwindcss";
+
+.media-overview {
+  color: #e6e6e6;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+  transition: all 200ms ease;
+}
+
+/* collapsed: clamp to 3 lines */
+.media-overview.clamped {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* change number of lines as needed */
+  overflow: hidden;
+}
+
+/* expanded: show full text */
+.media-overview.expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+/* read more button */
+.read-toggle-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0;
+  margin-top: 6px;
+}

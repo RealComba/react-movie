@@ -25,6 +25,20 @@ export const searchSeries = async (query) => {
     return data.results
 };
 
+export const search = async (query) => {
+    const response1 = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+    const data1 = await response1.json()
+    const response2 = await fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+    const data2 = await response2.json()
+    
+    // Aggiungi mediaType a ogni risultato
+    const moviesWithType = data1.results.map(m => ({ ...m, mediaType: 'movie' }))
+    const seriesWithType = data2.results.map(s => ({ ...s, mediaType: 'tv' }))
+    
+    return [...moviesWithType, ...seriesWithType]
+}
+
+
 export async function getMovieById(id) {
     const res = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=it-IT`);
     return res.json();
@@ -33,4 +47,14 @@ export async function getMovieById(id) {
 export async function getSeriesById(id) {
     const res = await fetch(`${BASE_URL}/tv/${id}?api_key=${API_KEY}&language=it-IT`);
     return res.json();
+}
+
+// ...existing code...
+
+export async function getImages(id, mediaType = 'movie') {
+    const endpoint = mediaType === 'movie' ? 'movie' : 'tv'
+    const res = await fetch(
+        `${BASE_URL}/${endpoint}/${id}/images?api_key=${API_KEY}`
+    )
+    return res.json()
 }

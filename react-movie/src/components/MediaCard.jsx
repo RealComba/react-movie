@@ -22,7 +22,8 @@ function MediaCard({ media }) {
         else navigate(`/watch/series/${media.id}`)
     }
     
-    return (
+return (
+    media.poster_path && (
         <div className="movie-card">
             <div className="movie-poster">
                 <img src={`https://image.tmdb.org/t/p/w500${media.poster_path}`} alt={media.title} />
@@ -40,6 +41,8 @@ function MediaCard({ media }) {
                 </div>
             </div>
         </div>
+    )
+     
     )
 }
 

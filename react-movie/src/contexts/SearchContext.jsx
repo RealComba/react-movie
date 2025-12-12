@@ -1,5 +1,5 @@
 import { createContext, useState, useContext } from "react"
-import { searchMovies, getPopularMovies, searchSeries, getPopularSeries } from "../services/api"
+import { searchMovies, getPopularMovies, searchSeries, getPopularSeries, search } from "../services/api"
 
 const SearchContext = createContext()
 
@@ -12,6 +12,7 @@ export const SearchProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true)
     const [isSearchingSeries, setIsSearchingSeries] = useState(false)
+    const [searching, setSearching] = useState([])
 
     //carico film popolari
     const loadPopularMovies = async () => {
@@ -46,27 +47,24 @@ export const SearchProvider = ({ children }) => {
   const handleSearch = async (e) => {
     e.preventDefault()
     if (!searchName.trim()) {
-      await loadPopularMovies()
-      return
+        await loadPopularMovies()
+        return
     }
     if (loading) return
 
     setLoading(true)
     try {
-      if (isSearchingSeries) {
-        const searchResults = await searchSeries(searchName)
-        setSeries(searchResults)
-        setMovies([])
-      } else {
-        const searchResults = await searchMovies(searchName)
-        setMovies(searchResults)
-        setSeries([])
-      }
-      setError(null)
-
+        const results = await search(searchName)
+        // Separa in base a mediaType
+        const movies = results.filter(r => r.mediaType === 'movie')
+        const series = results.filter(r => r.mediaType === 'tv')
+        
+        setMovies(movies)
+        setSeries(series)
+        setError(null)
     } catch (err) {
       console.log(err)
-      setError("Failed to search movies...")
+      setError("Failed to search...")
     } finally {
       setLoading(false)
     }
