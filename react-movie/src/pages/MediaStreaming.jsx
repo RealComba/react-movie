@@ -44,8 +44,8 @@ function MediaStreaming () {
 
 
     const playerUrl = mediaData.name
-        ? `https://godriveplayer.com/player.php?type=series&tmdb=${id}&season=${season}&episode=${ep}`
-        : `https://godriveplayer.com/player.php?imdb=${id}`;
+        ? `https://vixsrc.to/tv/${id}/${season}/${ep}?lang=it`
+        : `https://vixsrc.to/movie/${id}?lang=it`;
 
     return (
         <div className="flex flex-col"
@@ -86,7 +86,8 @@ function MediaStreaming () {
                     <iframe
                         src={playerUrl}
                         frameBorder="0"
-                        sandbox="allow-scripts allow-same-origin allow-fullscreen allow-forms"
+                        // sandbox="allow-scripts allow-fullscreen allow-forms"
+                        autoplay= "true"
                         className="w-200 h-100"
                         allow="fullscreen"
                     ></iframe>

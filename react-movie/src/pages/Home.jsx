@@ -3,6 +3,7 @@ import "../css/Home.css";
 import { EmblaCarousel } from "../components/Carousel";
 import { useSearchContext } from "../contexts/SearchContext";
 import MediaCard from "../components/MediaCard";
+import HeroBanner from "../components/HeroBanner";
 
 function Home() {
   const { searchName, movies, series, error, loading, loadPopularMovies, loadPopularSeries } = useSearchContext();
@@ -21,9 +22,14 @@ function Home() {
     : [];
 
   return (
-    <div className="home px-[4rem] pt-[2rem]">
+    <div className="home">
       {error && <p className="error-message">{error}</p>}
 
+      {!loading && filteredMovies.length > 0 && (
+        <HeroBanner media={filteredMovies.find(m => m.backdrop_path) || filteredMovies[0]} />
+      )}
+
+      <div className="main-content px-10 pt-10">
       <p className="font-bold text-2xl pb-4 text-neutral-200">I film più visti</p>
       {loading ? (
         <p className="loading">Loading...</p>
@@ -33,7 +39,9 @@ function Home() {
           <p className="font-bold text-2xl pb-4 pt-4 text-neutral-200">Le serie più viste</p>
           <EmblaCarousel movies={filteredSeries} />
         </>
+        
       )}
+      </div>
     </div>
   );
 }

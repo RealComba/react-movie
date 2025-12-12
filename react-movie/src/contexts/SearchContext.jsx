@@ -1,5 +1,5 @@
 import { createContext, useState, useContext } from "react"
-import { searchMovies, getPopularMovies, searchSeries, getPopularSeries, search } from "../services/api"
+import { getPopularMovies, getPopularSeries, search } from "../services/api"
 
 const SearchContext = createContext()
 
