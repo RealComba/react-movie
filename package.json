@@ -3,5 +3,8 @@
     "@tailwindcss/vite": "^4.1.17",
     "embla-carousel-react": "^8.6.0",
     "tailwindcss": "^4.1.17"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
   }
 }
