@@ -1,5 +1,5 @@
 {
-  "homepage": "https://tuo-username.github.io/nome-repo",
+  "homepage": "https://realcomba.github.io/react-movie",
   "name": "react-movie",
   "private": true,
   "version": "0.0.0",
@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "embla-carousel-react": "^8.6.0",

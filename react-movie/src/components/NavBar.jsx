@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 
 function NavBar() {
 
-    const { searchName, setSearchName, handleSearch, setIsSearchingSeries, isSearchingSeries } = useSearchContext()
+    const { searchName, setSearchName, handleSearch, setIsSearchingSeries, isSearchingSeries,  } = useSearchContext()
 
     useEffect(() => {
         

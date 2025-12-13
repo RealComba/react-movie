@@ -38,7 +38,7 @@ function HeroBanner({ media }) {
           <button className="hero__btn hero__btn--primary" onClick={handleWatch}>
             Guarda ora
           </button>
-          <button className="w-30 bg-neutral-200 rounded-lg font-bold flex flex-row items-center gap-2 p-2 text-black" onClick={handleWatch}>
+          <button className="w-30 bg-neutral-200 rounded-lg font-bold flex flex-row items-center gap-2 p-2 text-blackx" onClick={handleWatch}>
             <img className="w-5" src="https://www.svgrepo.com/show/24584/info-icon.svg" alt="" />
             Altre Info
           </button>
