@@ -70,7 +70,7 @@ function MediaStreaming () {
                     <p>- {mediaData.origin_country}</p>
                 </div>
             </div>
-            <div className="w-150 text-sm pt-8">
+            <div className="w-150 text-sm pt-8 flex flex-col items-start">
                 <p className={showMore ? "media-overview expanded" : "media-overview clamped"}>
                     {mediaData.overview}
                 </p>
@@ -80,6 +80,50 @@ function MediaStreaming () {
                 >
                   {showMore ? "Leggi di meno" : "Leggi di più"}
                 </button>
+                
+                {/* Season selector - only for series */}
+                {mediaData.name && mediaData.seasons && (
+                  <div className="season-selector mt-4">
+                    <p className="text-white font-semibold mb-2">Stagioni:</p>
+                    <div className="flex gap-2 w-[80vw] flex-wrap">
+                      {mediaData.seasons
+                        .filter(s => s.season_number > 0) // skip specials (season 0)
+                        .map((s) => (
+                          <button
+                            key={s.id}
+                            onClick={() => {
+                              setSeason(s.season_number);
+                              setEp(1); // reset episode when changing season
+                            }}
+                            className={`season-btn ${season === s.season_number ? 'active' : ''}`}
+                          >
+                            {s.season_number}
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Episode selector - only for series */}
+                {mediaData.name && mediaData.seasons && (
+                  <div className="episode-selector mt-4">
+                    <p className="text-white font-semibold mb-2">Episodi:</p>
+                    <div className="flex gap-2 w-[80vw] flex-wrap">
+                      {Array.from(
+                        { length: mediaData.seasons.find(s => s.season_number === season)?.episode_count || 0 },
+                        (_, i) => i + 1
+                      ).map((episodeNum) => (
+                        <button
+                          key={episodeNum}
+                          onClick={() => setEp(episodeNum)}
+                          className={`season-btn episode-btn ${ep === episodeNum ? 'active bg-green-400' : ''}`}
+                        >
+                          {episodeNum}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
             </div>
 
                 <div className="flex justify-center pt-20">

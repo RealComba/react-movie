@@ -33,3 +33,35 @@
   padding: 0;
   margin-top: 6px;
 }
+
+/* season selector buttons */
+.season-selector {
+  max-width: 600px;
+}
+
+.season-btn {
+  min-width: 48px;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.season-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.season-btn.active {
+  background: #e50914;
+  border-color: #e50914;
+}
+
+.episode-btn.active {
+  background: rgb(14, 176, 14);
+  border-color: rgb(14, 176, 14);
+}
