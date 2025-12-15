@@ -48,3 +48,87 @@
     padding: 0.5rem;
   }
 } */
+
+@media (max-width: 768px){
+
+  .navbar {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+  }
+
+  .navbar-link {
+    display: none;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  a {
+    font-size: 1.5rem;
+  }
+}
+
+/* burger visibility */
+.navbar-burger { display: none; }
+
+@media (max-width: 768px){
+  .navbar-burger { display: block; }
+}
+
+/* Debug / default: make burger visible (remove for production if desired) */
+.navbar-burger { display: block !important; }
+
+/* react-burger-menu styles */
+.bm-burger-button {
+  position: relative;
+  z-index: 60;
+  width: 36px;
+  height: 30px;
+}
+.bm-burger-bars {
+  background: #fff;
+}
+.bm-burger-bars-hover { background: #ccc; }
+.bm-menu-wrap { z-index: 55; }
+.bm-menu {
+  background: #0b0b0b;
+  padding: 2.5em 1.5em 0;
+  font-size: 1.15em;
+}
+.bm-item {
+  display: block;
+  color: #fff;
+  padding: 0.6rem 0;
+  text-decoration: none;
+}
+.bm-overlay {
+  background: rgba(0,0,0,0.3);
+}
+
+/* small adjustments for the inline search inside burger */
+.bm-search-form { display:flex; gap:8px; }
+.bm-search-input { flex:1; padding:6px 8px; border-radius:6px; border:1px solid rgba(255,255,255,0.12); }
+.bm-search-btn { padding:6px 10px; background:#e50914; color:#fff; border:none; border-radius:6px; }
+
+/* custom burger button (shown on all sizes for testing) */
+.custom-burger-button {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 36px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  gap: 3px;
+}
+.custom-burger-button span {
+  display:block;
+  height:3px;
+  background:#fff;
+  border-radius:2px;
+}
+.burger-wrapper { position: relative; }
