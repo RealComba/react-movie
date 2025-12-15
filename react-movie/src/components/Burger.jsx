@@ -27,6 +27,8 @@ function Burger() {
 				onStateChange={(state) => setIsOpen(state.isOpen)}
 				customBurgerIcon={false}
 			>
+				{/* close button inside menu */}
+				<button className="bm-close-btn" onClick={() => setIsOpen(false)} aria-label="Chiudi menu">✕</button>
 				<div className="bm-search">
 					<form onSubmit={(e) => { handleSearch(e); setIsOpen(false); }} className="bm-search-form">
 						<input

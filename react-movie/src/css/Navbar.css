@@ -97,6 +97,19 @@
   padding: 2.5em 1.5em 0;
   font-size: 1.15em;
 }
+.bm-menu-wrap { top: 0 !important; height: 100vh !important; }
+.bm-menu { height: 100vh; padding-top: 56px; box-sizing: border-box; }
+.bm-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 70;
+}
 .bm-item {
   display: block;
   color: #fff;

@@ -47,7 +47,7 @@
 }
 
 @media (max-width: 768px){
-  button {
+  .embla__button {
     display: none;
   }
 }
