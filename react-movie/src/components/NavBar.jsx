@@ -20,8 +20,8 @@ function NavBar() {
                 <div className="navbar-brand flex flex-row items-center gap-10">
                     <Link to="/" className='font-bold text-3xl'>Streaming Hub</Link>
                     <div className="navbar-link flex flex-row gap-4 text-sm">
-                        <Link to="/" className="nav-link">Home</Link>
-                        <Link to="/series" className='nav-link'>Serie tv</Link>
+                        {/* <Link to="/" className="nav-link">Home</Link>
+                        <Link to="/series" className='nav-link'>Serie tv</Link> */}
                         {/* <Link to="/favorites" className="nav-link">Preferiti</Link> */}
                     </div>
                 </div>
@@ -37,7 +37,7 @@ function NavBar() {
                             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                 <svg className="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
                             </div>
-                            <input type="search" id="search" className="rounded-lg block w-80 p-3 ps-9 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body" placeholder="Cerca..." required 
+                            <input type="search" id="search" className="rounded-full block w-50 p-3 ps-9 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body" placeholder="Cerca..." required 
                             value={searchName}
                             onChange={(e) => setSearchName(e.target.value)} />
                         </div>

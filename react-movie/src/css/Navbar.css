@@ -127,9 +127,7 @@
 
 /* custom burger button (shown on all sizes for testing) */
 .custom-burger-button {
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: none;
   width: 36px;
   height: 24px;
   background: transparent;
@@ -145,3 +143,24 @@
   border-radius:2px;
 }
 .burger-wrapper { position: relative; }
+
+@media (max-width: 768px){
+  .custom-burger-button {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+}
+
+@media (max-width: 512px) {
+
+    a {
+      font-size: 1.2rem;
+      width: 100%;
+    }
+
+    .navbar {
+      gap: 20px;
+    }
+}

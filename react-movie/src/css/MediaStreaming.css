@@ -65,3 +65,26 @@
   background: rgb(14, 176, 14);
   border-color: rgb(14, 176, 14);
 }
+
+.progress {
+  --size:50px;
+  height: 50px;
+  width: var(--size);
+  aspect-ratio:1;
+  border-radius : 50%;
+  background: conic-gradient(rgb(9, 213, 46) var(--progress,0), #363636 0);
+  display: grid;
+  place-content:center;
+}
+.progress:after{
+  width: calc(var(--size) * .8);
+  aspect-ratio:1;
+  content: attr(data-value);
+  display: grid;
+  background: #363636;
+  border-radius : 50%;
+  display: grid;
+  font-size: 16px;
+  place-content:center;
+  font-family: arial;
+}

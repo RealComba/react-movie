@@ -65,12 +65,34 @@ function MediaStreaming () {
                             className="movieLogo w-80"
                         />
                 )}
-                <div className="info flex flex-row gap-1" >
-                    <p className="">{mediaData.release_date?.slice(0,4)}</p>
-                    <p>- {mediaData.origin_country}</p>
+                <div className="info flex flex-row gap-1 pt-4 font-semibold" >
+                    {/* show release year for movies, first air year for series */}
+                    {mediaData.title ? (
+                      <p className="">{mediaData.release_date?.slice(0,4)}</p>
+                    ) : (
+                      <p>{mediaData.first_air_date?.slice(0,4)}</p>
+                    )}
+
+                    {/* seasons only for series */}
+                    {mediaData.name && mediaData.seasons?.length > 0 && (
+                      <p>- {mediaData.seasons.length} stagioni</p>
+                    )}
+
+                    {/* runtime only for movies (may be undefined for series) */}
+                    {mediaData.runtime && (
+                      <p>- {mediaData.runtime} min</p>
+                    )}
                 </div>
+                <div className="flex flex-row gap-5 items-center mt-5">
+                  <button className="p-2 font-bold w-35 rounded-sm text-lg bg-white text-black">▶ Riproduci</button>
+                  <div
+                    className="progress text-white font-semibold text-sm"
+                    data-value={mediaData.vote_average ? mediaData.vote_average.toFixed(1) : ''}
+                    style={{ ['--progress']: mediaData.vote_average ? `${Math.round(mediaData.vote_average * 10)}%` : '0%' }}
+                  ></div>
+              </div>
             </div>
-            <div className="w-150 text-sm pt-8 flex flex-col items-start">
+            <div className="w-[50%] lg:w-[40%] text-sm pt-8 flex flex-col items-start">
                 <p className={showMore ? "media-overview expanded" : "media-overview clamped"}>
                     {mediaData.overview}
                 </p>
@@ -126,7 +148,7 @@ function MediaStreaming () {
                 )}
             </div>
 
-                <div className="flex justify-center pt-20">
+                {/* <div className="flex justify-center pt-20">
                     <iframe
                         src={playerUrl}
                         frameBorder="0"
@@ -135,7 +157,7 @@ function MediaStreaming () {
                         className="w-200 h-100"
                         allow="fullscreen"
                     ></iframe>
-                </div>
+                </div> */}
             </div>
         </div>
     );

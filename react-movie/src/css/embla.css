@@ -50,4 +50,8 @@
   .embla__button {
     display: none;
   }
+
+  .embla__container {
+    padding: 10px;
+  }
 }
