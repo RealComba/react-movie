@@ -46,3 +46,9 @@ export async function getImages(id, mediaType = 'movie') {
     )
     return res.json()
 }
+
+export async function getYoutube(id, mediaType = 'movie') {
+    const endpoint = mediaType === 'movie' ? 'movie' : 'tv'
+    const res = await fetch(`${BASE_URL}/${endpoint}/${id}/videos?api_key=${API_KEY}`)
+    return res.json()
+}

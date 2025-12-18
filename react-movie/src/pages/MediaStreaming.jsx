@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
-import "../css/MediaStreaming.css"
-import { getMovieById, getSeriesById, getImages } from "../services/api";
-import { useState, useEffect } from 'react'
+import "../css/MediaStreaming.css";
+import { getMovieById, getSeriesById, getImages, getYoutube } from "../services/api";
+import { useState, useEffect } from "react";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
 
@@ -11,10 +11,11 @@ function MediaStreaming () {
     const { mediaType, id } = useParams()
     const [mediaData, setMediaData] = useState(null);
     const [season, setSeason] = useState(1)
-    const [imageData, setImageData] = useState()
-    const [ep, setEp] = useState(1)
-
-    const [showMore, setShowMore] = useState(false)
+    const [imageData, setImageData] = useState();
+    const [youtubeData, setYoutubeData] = useState();
+    const [ep, setEp] = useState(1);
+    const [showMore, setShowMore] = useState(false);
+    const [showTrailer, setShowTrailer] = useState(false);
 
     useEffect(() => {
 
@@ -31,147 +32,159 @@ function MediaStreaming () {
             setMediaData(data);
             const images = await getImages(id, mediaType)
             setImageData(images)
+            const youtube = await getYoutube(id, mediaType)
+            setYoutubeData(youtube)
         } catch (err) {
             console.error("error")
         }
     }
 
         fetchMedia();
-    }, [mediaType, id]);
+      }, [mediaType, id]);
+
+      // dopo 3s mostra il trailer al posto dell'immagine
+      useEffect(() => {
+        setShowTrailer(false);
+        const timer = setTimeout(() => setShowTrailer(true), 3000);
+        return () => clearTimeout(timer);
+      }, [id]);
 
     if (!mediaData) return <p>Loading...</p>;
     console.log(mediaData)
-
+    console.log(youtubeData)
 
     const playerUrl = mediaData.name
         ? `https://vixsrc.to/tv/${id}/${season}/${ep}?lang=it`
         : `https://vixsrc.to/movie/${id}?lang=it`;
 
+    // estrai il primo video youtube dai dati
+    const youtubeVideo = youtubeData?.results?.find(v => v.site === 'YouTube' && v.type === 'Trailer')
+    const youtubeUrl = youtubeVideo ? `https://www.youtube.com/embed/${youtubeVideo.key}?&muted=1&autoplay=1` : null
+    
+    // usa youtube se trovato, altrimenti vixsrc
+    const trailerUrl = youtubeUrl || playerUrl
+
     return (
-        <div className="flex flex-col"
-                style={{
-                    backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('https://image.tmdb.org/t/p/original${mediaData.backdrop_path}')`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundAttachment: 'fixed'
-                }}>
-            
-            <div className="px-[4rem] pt-[2rem]">
-               <div className="movieLogoContainer">
+      <div className="media-hero relative w-full flex" style={{ minHeight: "70vh" }}>
+        <div className="w-[35%] bg-black text-white px-8 py-10 flex flex-col gap-4 z-10">
+          <div className="movieLogoContainer">
             {imageData?.logos?.[0]?.file_path && (
-                        <img
-                            alt={mediaData.title || mediaData.name}
-                            src={`${IMAGE_BASE_URL}${imageData.logos[0].file_path}`}
-                            className="movieLogo w-80"
-                        />
-                )}
-                <div className="info flex flex-row gap-1 pt-4 font-semibold" >
-                    {/* show release year for movies, first air year for series */}
-                    {mediaData.title ? (
-                      <p className="">{mediaData.release_date?.slice(0,4)}</p>
-                    ) : (
-                      <p>{mediaData.first_air_date?.slice(0,4)}</p>
-                    )}
-
-                    {/* seasons only for series */}
-                    {mediaData.name && mediaData.seasons?.length > 0 && (
-                      <p>- {mediaData.seasons.length} stagioni</p>
-                    )}
-
-                    {/* runtime only for movies (may be undefined for series) */}
-                    {mediaData.runtime && (
-                      <p>- {mediaData.runtime} min</p>
-                    )}
-                </div>
-                <div className="flex flex-row gap-5 items-center mt-5">
-                  <button className="p-1 font-semibold w-35 rounded-sm text-md bg-white text-black">▶ Riproduci</button>
-                  <div
-                    className="progress text-white font-semibold text-sm"
-                    data-value={mediaData.vote_average ? mediaData.vote_average.toFixed(1) : ''}
-                    style={{ ['--progress']: mediaData.vote_average ? `${Math.round(mediaData.vote_average * 10)}%` : '0%' }}
-                  ></div>
-                  <div className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray-400 bg-black hover:border-white transform hover:scale-105 transition-transform">
-                    <button className="font-bold">✚</button>
-                  </div>
-                  <div className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray-400 bg-black hover:border-white transform hover:scale-105 transition-transform">
-                    <button className="font-bold">❤️</button>
-                  </div>
+              <img
+                alt={mediaData.title || mediaData.name}
+                src={`${IMAGE_BASE_URL}${imageData.logos[0].file_path}`}
+                className="movieLogo w-80"
+              />
+            )}
+            <div className="info flex flex-row gap-1 pt-4 font-semibold">
+              {mediaData.title ? (
+                <p className="">{mediaData.release_date?.slice(0, 4)}</p>
+              ) : (
+                <p>{mediaData.first_air_date?.slice(0, 4)}</p>
+              )}
+              {mediaData.name && mediaData.seasons?.length > 0 && (
+                <p>- {mediaData.seasons.length} stagioni</p>
+              )}
+              {mediaData.runtime && <p>- {mediaData.runtime} min</p>}
+            </div>
+            <div className="flex flex-row gap-5 items-center mt-5">
+              <button className="p-1 font-semibold w-35 rounded-sm text-md bg-white text-black">▶ Riproduci</button>
+              <div
+                className="progress text-white font-semibold text-sm"
+                data-value={mediaData.vote_average ? mediaData.vote_average.toFixed(1) : ''}
+                style={{ ['--progress']: mediaData.vote_average ? `${Math.round(mediaData.vote_average * 10)}%` : '0%' }}
+              ></div>
+              <div className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray-400 bg-black hover:border-white transform hover:scale-105 transition-transform">
+                <button className="font-bold">✚</button>
+              </div>
+              <div className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray-400 bg-black hover:border-white transform hover:scale-105 transition-transform">
+                <button className="font-bold">❤️</button>
               </div>
             </div>
-            <div className="w-[50%] lg:w-[40%] text-sm pt-8 flex flex-col items-start">
-                <p className={showMore ? "media-overview expanded" : "media-overview clamped"}>
-                    {mediaData.overview}
-                </p>
-                <button 
-                  className="read-toggle-btn"
-                  onClick={() => setShowMore(prev => !prev)}
-                >
-                  {showMore ? "Leggi di meno" : "Leggi di più"}
-                </button>
-                <div className="actors flex flex-row mt-5">
-                  <p className="text-sm font-bold text-neutral-400">Attori:</p>
-                  <p className="text-sm text-neutral-400">
-                    {mediaData.genres.map(g => g.name)} 
-                  </p>
+          </div>
+
+          <div className="text-sm pt-6 flex flex-col items-start gap-2">
+            <p className={showMore ? "media-overview expanded" : "media-overview clamped"}>
+              {mediaData.overview}
+            </p>
+            <button
+              className="read-toggle-btn"
+              onClick={() => setShowMore(prev => !prev)}
+            >
+              {showMore ? "Leggi di meno" : "Leggi di più"}
+            </button>
+            <div className="actors flex flex-row mt-3">
+              <p className="text-sm font-bold text-neutral-300 mr-2">Generi:</p>
+              <p className="text-sm text-neutral-200">
+                {Array.isArray(mediaData.genres) ? mediaData.genres.map(g => g.name).join(", ") : null}
+              </p>
+            </div>
+
+            {mediaData.name && mediaData.seasons && (
+              <div className="season-selector mt-4">
+                <p className="text-white font-semibold mb-2">Stagioni:</p>
+                <div className="flex gap-2 w-[80vw] max-w-[420px] flex-wrap">
+                  {mediaData.seasons
+                    .filter(s => s.season_number > 0)
+                    .map((s) => (
+                      <button
+                        key={s.id}
+                        onClick={() => {
+                          setSeason(s.season_number);
+                          setEp(1);
+                        }}
+                        className={`season-btn ${season === s.season_number ? 'active' : ''}`}
+                      >
+                        {s.season_number}
+                      </button>
+                    ))}
                 </div>
-                
-                {/* Season selector - only for series */}
-                {mediaData.name && mediaData.seasons && (
-                  <div className="season-selector mt-4">
-                    <p className="text-white font-semibold mb-2">Stagioni:</p>
-                    <div className="flex gap-2 w-[80vw] flex-wrap">
-                      {mediaData.seasons
-                        .filter(s => s.season_number > 0) // skip specials (season 0)
-                        .map((s) => (
-                          <button
-                            key={s.id}
-                            onClick={() => {
-                              setSeason(s.season_number);
-                              setEp(1); // reset episode when changing season
-                            }}
-                            className={`season-btn ${season === s.season_number ? 'active' : ''}`}
-                          >
-                            {s.season_number}
-                          </button>
-                        ))}
-                    </div>
-                  </div>
-                )}
+              </div>
+            )}
 
-                {/* Episode selector - only for series */}
-                {mediaData.name && mediaData.seasons && (
-                  <div className="episode-selector mt-4">
-                    <p className="text-white font-semibold mb-2">Episodi:</p>
-                    <div className="flex gap-2 w-[80vw] flex-wrap">
-                      {Array.from(
-                        { length: mediaData.seasons.find(s => s.season_number === season)?.episode_count || 0 },
-                        (_, i) => i + 1
-                      ).map((episodeNum) => (
-                        <button
-                          key={episodeNum}
-                          onClick={() => setEp(episodeNum)}
-                          className={`season-btn episode-btn ${ep === episodeNum ? 'active bg-green-400' : ''}`}
-                        >
-                          {episodeNum}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-            </div>
-
-                {/* <div className="flex justify-center pt-20">
-                    <iframe
-                        src={playerUrl}
-                        frameBorder="0"
-                        // sandbox="allow-scripts allow-fullscreen allow-forms"
-                        autoplay= "true"
-                        className="w-200 h-100"
-                        allow="fullscreen"
-                    ></iframe>
-                </div> */}
-            </div>
+            {mediaData.name && mediaData.seasons && (
+              <div className="episode-selector mt-4">
+                <p className="text-white font-semibold mb-2">Episodi:</p>
+                <div className="flex gap-2 w-[80vw] max-w-[420px] flex-wrap">
+                  {Array.from(
+                    { length: mediaData.seasons.find(s => s.season_number === season)?.episode_count || 0 },
+                    (_, i) => i + 1
+                  ).map((episodeNum) => (
+                    <button
+                      key={episodeNum}
+                      onClick={() => setEp(episodeNum)}
+                      className={`season-btn episode-btn ${ep === episodeNum ? 'active bg-green-400' : ''}`}
+                    >
+                      {episodeNum}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
+
+        <div className="w-[65%] relative overflow-hidden">
+          {!showTrailer && (
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: `url('https://image.tmdb.org/t/p/original${mediaData.backdrop_path}')`
+              }}
+            />
+          )}
+          {showTrailer && (
+            <iframe
+              title="Trailer"
+              src={trailerUrl}
+              frameBorder="0"
+              allow="autoplay; fullscreen"
+              className="absolute inset-0 w-full h-full"
+              allowFullScreen
+            ></iframe>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/15 to-transparent pointer-events-none" />
+        </div>
+      </div>
     );
 }
 

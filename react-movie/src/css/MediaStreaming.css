@@ -76,6 +76,7 @@
   display: grid;
   place-content:center;
 }
+
 .progress:after{
   width: calc(var(--size) * 0.85);
   aspect-ratio:1;
