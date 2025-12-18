@@ -84,12 +84,18 @@ function MediaStreaming () {
                     )}
                 </div>
                 <div className="flex flex-row gap-5 items-center mt-5">
-                  <button className="p-2 font-bold w-35 rounded-sm text-lg bg-white text-black">▶ Riproduci</button>
+                  <button className="p-1 font-semibold w-35 rounded-sm text-md bg-white text-black">▶ Riproduci</button>
                   <div
                     className="progress text-white font-semibold text-sm"
                     data-value={mediaData.vote_average ? mediaData.vote_average.toFixed(1) : ''}
                     style={{ ['--progress']: mediaData.vote_average ? `${Math.round(mediaData.vote_average * 10)}%` : '0%' }}
                   ></div>
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray-400 bg-black hover:border-white transform hover:scale-105 transition-transform">
+                    <button className="font-bold">✚</button>
+                  </div>
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray-400 bg-black hover:border-white transform hover:scale-105 transition-transform">
+                    <button className="font-bold">❤️</button>
+                  </div>
               </div>
             </div>
             <div className="w-[50%] lg:w-[40%] text-sm pt-8 flex flex-col items-start">
@@ -102,6 +108,12 @@ function MediaStreaming () {
                 >
                   {showMore ? "Leggi di meno" : "Leggi di più"}
                 </button>
+                <div className="actors flex flex-row mt-5">
+                  <p className="text-sm font-bold text-neutral-400">Attori:</p>
+                  <p className="text-sm text-neutral-400">
+                    {mediaData.genres.map(g => g.name)} 
+                  </p>
+                </div>
                 
                 {/* Season selector - only for series */}
                 {mediaData.name && mediaData.seasons && (

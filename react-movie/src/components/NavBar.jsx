@@ -27,6 +27,7 @@ function NavBar() {
                 </div>
 
                 {/* Burger menu - visible on small screens */}
+                <div className=''></div>
                 <div className="navbar-burger">
                   <Burger />
                 </div>

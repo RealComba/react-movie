@@ -72,12 +72,12 @@
   width: var(--size);
   aspect-ratio:1;
   border-radius : 50%;
-  background: conic-gradient(rgb(9, 213, 46) var(--progress,0), #363636 0);
+  background: conic-gradient(rgb(66, 216, 94) var(--progress,0), #363636 0);
   display: grid;
   place-content:center;
 }
 .progress:after{
-  width: calc(var(--size) * .8);
+  width: calc(var(--size) * 0.85);
   aspect-ratio:1;
   content: attr(data-value);
   display: grid;
