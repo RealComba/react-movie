@@ -13,6 +13,18 @@ export const getPopularSeries = async () => {
     return data.results
 }
 
+export const getNowPlayingMovies = async () => {
+    const response = await fetch(`${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=it-IT`)
+    const data = await response.json()
+    return data.results
+}
+
+export const getHorrorMovies = async () => {
+    const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=27&language=it-IT`)
+    const data = await response.json()
+    return data.results
+}
+
 export const search = async (query) => {
     const response1 = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
     const data1 = await response1.json()

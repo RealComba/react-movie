@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import "../css/MediaStreaming.css";
-import { getMovieById, getSeriesById, getImages, getYoutube } from "../services/api";
+import { getMovieById, getSeriesById, getImages, getYoutube, getNowPlayingMovies } from "../services/api";
 import { useState, useEffect } from "react";
+import { EmblaCarousel } from "../components/Carousel";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
 
@@ -13,6 +14,7 @@ function MediaStreaming () {
     const [season, setSeason] = useState(1)
     const [imageData, setImageData] = useState();
     const [youtubeData, setYoutubeData] = useState();
+    const [nowPlaying, setNowPlaying] = useState();
     const [ep, setEp] = useState(1);
     const [showMore, setShowMore] = useState(false);
     const [showTrailer, setShowTrailer] = useState(false);
@@ -34,10 +36,12 @@ function MediaStreaming () {
             setImageData(images)
             const youtube = await getYoutube(id, mediaType)
             setYoutubeData(youtube)
+            const playing = await getNowPlayingMovies()
+            setNowPlaying(playing)
         } catch (err) {
             console.error("error")
         }
-    }
+    } 
 
         fetchMedia();
       }, [mediaType, id]);
@@ -65,6 +69,7 @@ function MediaStreaming () {
     const trailerUrl = youtubeUrl || playerUrl
 
     return (
+      <div className="media-streaming-container">
       <div className="media-hero relative w-full flex" style={{ minHeight: "70vh" }}>
         <div className="w-[35%] bg-black text-white px-8 py-10 flex flex-col gap-4 z-10">
           <div className="movieLogoContainer">
@@ -185,6 +190,15 @@ function MediaStreaming () {
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/15 to-transparent pointer-events-none" />
         </div>
       </div>
+
+      {/* Sezione Now Playing */}
+      {nowPlaying && nowPlaying.length > 0 && (
+        <div className="now-playing-section px-10 py-10 bg-black">
+          <p className="font-bold text-2xl pb-4 text-neutral-200">Al cinema ora</p>
+          <EmblaCarousel movies={nowPlaying} />
+        </div>
+      )}
+    </div>
     );
 }
 
