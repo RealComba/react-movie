@@ -1,14 +1,13 @@
-import { useParams } from "react-router-dom";
 import "../css/MediaStreaming.css";
+import { useParams, useNavigate } from "react-router-dom";
 import { getMovieById, getSeriesById, getImages, getYoutube, getNowPlayingMovies } from "../services/api";
 import { useState, useEffect } from "react";
 import { EmblaCarousel } from "../components/Carousel";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
 
-
-
 function MediaStreaming () {
+    const navigate = useNavigate()
     const { mediaType, id } = useParams()
     const [mediaData, setMediaData] = useState(null);
     const [season, setSeason] = useState(1)
@@ -57,6 +56,11 @@ function MediaStreaming () {
     console.log(mediaData)
     console.log(youtubeData)
 
+    function openMedia() {
+        navigate(`/watch/${mediaType}/${mediaData.id}/stream`, { state: { season, ep } })
+      }
+
+
     const playerUrl = mediaData.name
         ? `https://vixsrc.to/tv/${id}/${season}/${ep}?lang=it`
         : `https://vixsrc.to/movie/${id}?lang=it`;
@@ -92,7 +96,7 @@ function MediaStreaming () {
               {mediaData.runtime && <p>- {mediaData.runtime} min</p>}
             </div>
             <div className="flex flex-row gap-5 items-center mt-5">
-              <button className="p-1 font-semibold w-35 rounded-sm text-md bg-white text-black">▶ Riproduci</button>
+              <button onClick={openMedia} className="p-1 font-semibold w-35 rounded-sm text-md bg-white text-black">▶ Riproduci</button>
               <div
                 className="progress text-white font-semibold text-sm"
                 data-value={mediaData.vote_average ? mediaData.vote_average.toFixed(1) : ''}

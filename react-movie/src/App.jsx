@@ -7,6 +7,7 @@ import { MovieProvider } from "./contexts/MovieContext"
 import { SearchProvider } from "./contexts/SearchContext";
 import Series from "./pages/Series"
 import MediaStreaming from "./pages/MediaStreaming";
+import StreamingPage from "./pages/StreamingPage"
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/series" element={<Series/>}></Route>
           <Route path="/watch/:mediaType/:id" element={<MediaStreaming />} />
+          <Route path="/watch/:mediaType/:id/stream" element={<StreamingPage />}></Route>
         </Routes>
       </MovieProvider>
       </SearchProvider>
