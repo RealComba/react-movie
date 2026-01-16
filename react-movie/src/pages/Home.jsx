@@ -8,7 +8,6 @@ import { getHorrorMovies } from "../services/api";
 
 function Home() {
   const { searchName, movies, series, error, loading, loadPopularMovies, loadPopularSeries } = useSearchContext();
-  const [HorrorMovie, setHorrorMovie] = useState()
 
   useEffect(() => {
     const fetchHorrorMovies = async () => {
@@ -46,8 +45,6 @@ function Home() {
           <EmblaCarousel movies={filteredMovies} />
           <p className="font-bold text-2xl pb-4 pt-4 text-neutral-200 px-4 md:px-0">Le serie più viste</p>
           <EmblaCarousel movies={filteredSeries} />
-          <p className="font-bold text-2xl pb-4 pt-4 text-neutral-200 px-4 md:px-0">I film Horror</p>
-          <EmblaCarousel movies={HorrorMovie} />
         </>
         
       )}
