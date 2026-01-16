@@ -7,6 +7,9 @@ import { getSeriesById } from "../services/api"
 function MediaCard({ media }) {
     const navigate = useNavigate()
     const { isFavorite, addToFavorites, removeFromFavorites } = useMovieContext()
+    
+    if (!media) return null
+    
     const favorite = isFavorite(media.id)
 
     function onFavoriteClick(e) {

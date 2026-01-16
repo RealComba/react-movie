@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useSearchContext } from '../contexts/SearchContext'
 import "../css/NavBar.css"
 import { useEffect } from 'react'
@@ -8,30 +8,43 @@ import Burger from '../components/Burger'
 
 function NavBar() {
 
-    const { searchName, setSearchName, handleSearch, setIsSearchingSeries, isSearchingSeries,  } = useSearchContext()
+    const { searchName, setSearchName, handleSearch, setIsSearchingSeries, isSearchingSeries, loadPopularMovies, loadPopularSeries } = useSearchContext()
+    const navigate = useNavigate()
 
     useEffect(() => {
         
     })
 
+    const handleLogoClick = (e) => {
+        e.preventDefault()
+        setSearchName("")
+        loadPopularMovies()
+        loadPopularSeries()
+        navigate("/")
+    }
+
     return (
         <div>
             <div className="navbar flex flex-row bg-gradient-to-b from-neutral-950 to-neutral-900 px-[4rem] p-[1rem] items-center justify-between gap-10">
                 <div className="navbar-brand flex flex-row items-center gap-10">
-                    <Link to="/" className='font-bold text-3xl'>Streaming Hub</Link>
-                    <div className="navbar-link flex flex-row gap-4 text-sm">
+                    <Link to="/" onClick={handleLogoClick} className='font-bold text-3xl'>Streaming Hub</Link>
+                    <div className="navbar-link flex flex-row gap-4 text-sm gap-5">
+                        <Link to="/" className='text-lg font-semibold'>Home</Link>
+                        <Link to="/film" className='text-lg font-semibold'>Film</Link>
+                        <Link to="/series" className='text-lg font-semibold'>Serie tv</Link>
+                        <Link to="/favorites" className='text-lg font-semibold'>Preferiti</Link>
+
                         {/* <Link to="/" className="nav-link">Home</Link>
                         <Link to="/series" className='nav-link'>Serie tv</Link> */}
                         {/* <Link to="/favorites" className="nav-link">Preferiti</Link> */}
                     </div>
                 </div>
 
-                {/* Burger menu - visible on small screens */}
-                <div className=''></div>
+                <div className=''>
                 <div className="navbar-burger">
                   <Burger />
                 </div>
-
+                </div>
                 <form onSubmit={handleSearch} className="search-form">   
                     <label htmlFor="search" className="block mb-2.5 text-sm font-medium text-heading sr-only">Cerca...</label>
                         <div className="relative">

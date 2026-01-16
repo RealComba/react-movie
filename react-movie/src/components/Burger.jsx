@@ -26,6 +26,7 @@ function Burger() {
 				isOpen={isOpen}
 				onStateChange={(state) => setIsOpen(state.isOpen)}
 				customBurgerIcon={false}
+				disableCloseButton={true}
 			>
 				{/* close button inside menu */}
 				<button className="bm-close-btn" onClick={() => setIsOpen(false)} aria-label="Chiudi menu">✕</button>

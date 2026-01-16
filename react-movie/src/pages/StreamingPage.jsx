@@ -6,8 +6,8 @@ function StreamingPage() {
     const { season = 1, ep = 1 } = location.state || {};
 
     const playerUrl = mediaType === "movie"
-        ? `https://vixsrc.to/movie/${id}?lang=it`
-        : `https://vixsrc.to/tv/${id}/${season}/${ep}?lang=it`;
+        // ? `https://vixsrc.to/movie/${id}?lang=it`
+        // : `https://vixsrc.to/tv/${id}/${season}/${ep}?lang=it`;
 
     return (
         <div style={{ position: "relative", width: "100%", height: "100vh", background: "#000" }}>

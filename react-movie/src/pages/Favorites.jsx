@@ -8,10 +8,10 @@ function Favorites() {
     if (favorites.length > 0) {
         return (
         <div>
-            <h2 className="favorites">Favorites</h2>
+            <h2 className="favorites font-bold text-2xl">Preferiti</h2>
             <div className="movies-grid">
                 {favorites.map(movie => 
-                <MovieCard movie={movie} key={movie.id} ></MovieCard>
+                <MovieCard media={movie} key={movie.id} ></MovieCard>
                 )}
             </div>
         </div>
@@ -20,8 +20,8 @@ function Favorites() {
     return (
         <div>
             <div className="favorites-empty">
-                <h2>No favotite movies yet</h2>
-                <p>Start adding movies to your favorites list</p>
+                <h2 className="font-bold">Nessun media tra i Preferiti</h2>
+                <p>Aggiungi un media tra i preferiti per iniziare</p>
             </div>
         </div>
     )

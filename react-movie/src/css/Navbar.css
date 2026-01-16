@@ -120,6 +120,18 @@
   background: rgba(0,0,0,0.3);
 }
 
+/* Accessibility: disable focus on menu items when menu is closed */
+.bm-menu-wrap[aria-hidden="true"] {
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+.bm-menu-wrap[aria-hidden="true"] .bm-item,
+.bm-menu-wrap[aria-hidden="true"] input,
+.bm-menu-wrap[aria-hidden="true"] button {
+  pointer-events: none !important;
+}
+
 /* small adjustments for the inline search inside burger */
 .bm-search-form { display:flex; gap:8px; }
 .bm-search-input { flex:1; padding:6px 8px; border-radius:6px; border:1px solid rgba(255,255,255,0.12); }

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "../css/Home.css";
+import icon from "../assets/info-icon.svg"
 
 function HeroBanner({ media }) {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ function HeroBanner({ media }) {
             Guarda ora
           </button>
           <button className="w-30 bg-neutral-500 rounded-lg font-bold flex flex-row items-center gap-2 p-2 text-blackx" onClick={handleWatch}>
-            <img className="w-5" src="https://www.svgrepo.com/show/24584/info-icon.svg" alt="" />
+            <img className="w-5 h-5" src={icon} alt="" />
             Altre Info
           </button>
         </div>
