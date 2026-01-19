@@ -69,8 +69,8 @@ function MediaStreaming () {
     const youtubeVideo = youtubeData?.results?.find(v => v.site === 'YouTube' && v.type === 'Trailer')
     const youtubeUrl = youtubeVideo ? `https://www.youtube.com/embed/${youtubeVideo.key}?&muted=1&autoplay=1` : null
     
-    // usa youtube se trovato, altrimenti vixsrc
-    const trailerUrl = youtubeUrl || playerUrl
+    // usa youtube se trovato, per i film usa vixsrc come fallback, per le serie usa solo youtube
+    const trailerUrl = youtubeUrl || (mediaData.title ? playerUrl : null)
 
     return (
       <div className="media-streaming-container">
