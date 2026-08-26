@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import "../css/NavBar.css"
+import "../css/Navbar.css"
 import { useSearchContext } from "../contexts/SearchContext";
 import { useState } from 'react';
 
