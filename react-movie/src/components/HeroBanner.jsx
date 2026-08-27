@@ -10,7 +10,6 @@ function HeroBanner({ media, onOpenDetails }) {
   const { isFavorite, toggleFavorite, isLiked, toggleLike } = useMovieContext();
   const [showTrailer, setShowTrailer] = useState(false);
   const [trailerKey, setTrailerKey] = useState(null);
-  const [isMuted, setIsMuted] = useState(true);
 
   const mediaType = media?.title ? "movie" : "tv";
   const isFav = media ? isFavorite(media.id) : false;
@@ -68,7 +67,7 @@ function HeroBanner({ media, onOpenDetails }) {
   };
 
   const youtubeEmbedUrl = trailerKey
-    ? `https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=${isMuted ? 1 : 0}&controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&loop=1&playlist=${trailerKey}`
+    ? `https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&loop=1&playlist=${trailerKey}`
     : null;
 
   return (
@@ -127,7 +126,7 @@ function HeroBanner({ media, onOpenDetails }) {
             onClick={() => toggleFavorite({ ...media, mediaType })}
             title={isFav ? "Rimuovi dalla lista" : "Aggiungi alla lista"}
           >
-            {isFav ? "✓ Nella lista" : "+ La mia lista"}
+            {isFav ? "✓ In lista" : "+ Lista"}
           </button>
 
           <button
@@ -139,26 +138,13 @@ function HeroBanner({ media, onOpenDetails }) {
           </button>
 
           <button className="hero__btn hero__btn--secondary" onClick={handleInfo}>
-            <img className="icon-sm" src={icon} alt="" style={{ width: "18px", height: "18px" }} />
-            Altre Info
+            <img className="icon-sm" src={icon} alt="" style={{ width: "16px", height: "16px" }} />
+            Info
           </button>
         </div>
       </div>
-
-      {/* Trailer Sound toggle */}
-      {showTrailer && trailerKey && (
-        <button
-          type="button"
-          className="hero__sound-toggle"
-          onClick={() => setIsMuted((prev) => !prev)}
-          title={isMuted ? "Attiva audio" : "Disattiva audio"}
-        >
-          {isMuted ? "🔇" : "🔊"}
-        </button>
-      )}
     </section>
   );
 }
 
 export default HeroBanner;
-

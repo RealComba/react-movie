@@ -128,15 +128,20 @@
   border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
   border-radius: 50%;
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   transition: all 0.2s ease;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   cursor: pointer;
   padding: 0;
 }
@@ -174,7 +179,29 @@
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
 }
 
-.btn.details:hover {
-  color: #38bdf8;
-  border-color: #38bdf8;
+@media (max-width: 768px) {
+  .movie-card-overlay {
+    padding: 8px 6px;
+  }
+
+  .movie-actions {
+    gap: 6px;
+  }
+
+  .btn {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    font-size: 0.78rem;
+  }
+
+  .match-score {
+    font-size: 0.7rem;
+  }
+
+  .overlay-title {
+    font-size: 0.8rem;
+    line-height: 1.15;
+  }
 }

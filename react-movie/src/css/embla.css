@@ -1,13 +1,18 @@
 .embla {
   position: relative;
   width: 100%;
+  max-width: 100%;
   margin: 0 auto;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .embla__viewport {
   overflow: hidden;
   width: 100%;
-  padding: 12px 0;
+  max-width: 100%;
+  padding: 10px 0;
+  box-sizing: border-box;
 }
 
 .embla__container {
@@ -15,13 +20,15 @@
   gap: 12px;
   will-change: transform;
   user-select: none;
+  box-sizing: border-box;
 }
 
-/* Larghezze slide responsive deterministiche per uno scroll fluido e uniforme */
+/* Larghezze slide responsive deterministiche per uno scroll fluido e costante */
 .embla__slide {
   flex: 0 0 calc((100% - 5 * 12px) / 6);
   min-width: 0;
   position: relative;
+  box-sizing: border-box;
 }
 
 @media (max-width: 1500px) {
@@ -44,16 +51,16 @@
 
 @media (max-width: 600px) {
   .embla__slide {
-    flex: 0 0 calc((100% - 10px) / 2.2);
+    flex: 0 0 calc((100% - 8px) / 2.3);
   }
 }
 
 /* Paddle di scorrimento laterali a tutta altezza stile Netflix */
 .embla__paddle {
   position: absolute;
-  top: 12px;
-  bottom: 12px;
-  width: 48px;
+  top: 10px;
+  bottom: 10px;
+  width: 44px;
   z-index: 20;
   display: flex;
   align-items: center;
@@ -95,15 +102,15 @@
 }
 
 .embla__paddle svg {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   fill: currentColor;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
   transition: transform 0.2s ease;
 }
 
 .embla__paddle:hover svg {
-  transform: scale(1.25);
+  transform: scale(1.2);
 }
 
 @media (max-width: 768px) {
@@ -112,6 +119,10 @@
   }
 
   .embla__viewport {
-    padding: 8px 0;
+    padding: 4px 0;
+  }
+
+  .embla__container {
+    gap: 8px;
   }
 }

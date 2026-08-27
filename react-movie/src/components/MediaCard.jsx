@@ -93,14 +93,6 @@ function MediaCard({ media, onOpenDetails }) {
                             >
                                 {liked ? "❤️" : "🤍"}
                             </button>
-                            <button
-                                type="button"
-                                className="btn details"
-                                title="Altre info"
-                                onClick={handleDetailsClick}
-                            >
-                                ℹ
-                            </button>
                         </div>
                     </div>
                 </div>
