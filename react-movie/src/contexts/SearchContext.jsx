@@ -1,98 +1,115 @@
-import { createContext, useState, useContext } from "react"
-import { getPopularMovies, getPopularSeries, search } from "../services/api"
+import { createContext, useState, useContext, useCallback, useMemo } from "react";
+import { getPopularMovies, getPopularSeries, search } from "../services/api";
 
-const SearchContext = createContext()
+const SearchContext = createContext();
 
-export const useSearchContext = () => useContext(SearchContext)
+export const useSearchContext = () => useContext(SearchContext);
 
 export const SearchProvider = ({ children }) => {
-  const [searchName, setSearchName] = useState("")
-  const [movies, setMovies] = useState([])
-  const [series, setSeries] = useState([])
+  const [searchName, setSearchName] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [series, setSeries] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true)
-  const [isSearchingSeries, setIsSearchingSeries] = useState(false)
-  const [searching, setSearching] = useState([])
+  const [loading, setLoading] = useState(true);
+  const [isSearchingSeries, setIsSearchingSeries] = useState(false);
 
-  //carico film popolari
-  const loadPopularMovies = async () => {
+  // Caricamento simultaneo iniziale per evitare conflitti di loading
+  const loadInitialData = useCallback(async () => {
     try {
-      setLoading(true)
-      const popularMovies = await getPopularMovies()
-      setMovies(popularMovies)
-      setError(null)
-    } catch (err) {
-      console.log(err)
-      setError("Failed to load movies...")
-    } finally {
-      setLoading(false)
-    }
-  }
+      setLoading(true);
+      const [moviesRes, seriesRes] = await Promise.allSettled([
+        getPopularMovies(),
+        getPopularSeries()
+      ]);
 
-  const loadPopularSeries = async () => {
+      if (moviesRes.status === "fulfilled") setMovies(moviesRes.value || []);
+      if (seriesRes.status === "fulfilled") setSeries(seriesRes.value || []);
+      setError(null);
+    } catch (err) {
+      console.error("Errore nel caricamento iniziale:", err);
+      setError("Impossibile caricare i contenuti in evidenza.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const loadPopularMovies = useCallback(async () => {
     try {
-      setLoading(true)
-      const popularSeries = await getPopularSeries()
-      setSeries(popularSeries)
-      setError(null)
+      setLoading(true);
+      const popularMovies = await getPopularMovies();
+      setMovies(popularMovies || []);
+      setError(null);
     } catch (err) {
-      console.log(err)
-      setError("Failed to load movies...")
+      console.error(err);
+      setError("Impossibile caricare i film.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  }, []);
 
-  //ricerca film
-  const handleSearch = async (e) => {
-    e.preventDefault()
+  const loadPopularSeries = useCallback(async () => {
+    try {
+      setLoading(true);
+      const popularSeries = await getPopularSeries();
+      setSeries(popularSeries || []);
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError("Impossibile caricare le serie TV.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Ricerca globale
+  const handleSearch = useCallback(async (e) => {
+    if (e) e.preventDefault();
     if (!searchName.trim()) {
-      await loadPopularMovies()
-      return
-    }
-    if (loading) return
-
-    setLoading(true)
-    try {
-      const results = await search(searchName)
-      // Separa in base a mediaType
-      const movies = results.filter(r => r.mediaType === 'movie')
-      const series = results.filter(r => r.mediaType === 'tv')
-
-      setMovies(movies)
-      setSeries(series)
-      setError(null)
-    } catch (err) {
-      console.log(err)
-      setError("Failed to search...")
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const triggerSearch = async (query) => {
-    setSearchName(query);
-    if (!query.trim()) {
-      await loadPopularMovies();
+      await loadInitialData();
       return;
     }
+
     setLoading(true);
     try {
-      const results = await search(query)
-      const movies = results.filter(r => r.mediaType === 'movie')
-      const series = results.filter(r => r.mediaType === 'tv')
-      setMovies(movies)
-      setSeries(series)
-      setError(null)
-    } catch (err) {
-      console.error(err)
-      setError("Search failed")
-    } finally {
-      setLoading(false)
-    }
-  }
+      const results = await search(searchName);
+      const m = results.filter((r) => r.mediaType === "movie");
+      const s = results.filter((r) => r.mediaType === "tv");
 
-  const value = {
+      setMovies(m);
+      setSeries(s);
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError("Ricerca fallita. Riprova più tardi.");
+    } finally {
+      setLoading(false);
+    }
+  }, [searchName, loadInitialData]);
+
+  const triggerSearch = useCallback(async (query) => {
+    setSearchName(query);
+    if (!query.trim()) {
+      await loadInitialData();
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const results = await search(query);
+      const m = results.filter((r) => r.mediaType === "movie");
+      const s = results.filter((r) => r.mediaType === "tv");
+      setMovies(m);
+      setSeries(s);
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError("Ricerca fallita");
+    } finally {
+      setLoading(false);
+    }
+  }, [loadInitialData]);
+
+  const value = useMemo(() => ({
     searchName,
     setSearchName,
     movies,
@@ -101,12 +118,30 @@ export const SearchProvider = ({ children }) => {
     loading,
     handleSearch,
     loadPopularMovies,
+    loadPopularSeries,
+    loadInitialData,
     isSearchingSeries,
     setIsSearchingSeries,
-    loadPopularSeries,
     triggerSearch
-  }
-  return <SearchContext.Provider value={value}>
-    {children}
-  </SearchContext.Provider>
-}
+  }), [
+    searchName,
+    movies,
+    series,
+    error,
+    loading,
+    handleSearch,
+    loadPopularMovies,
+    loadPopularSeries,
+    loadInitialData,
+    isSearchingSeries,
+    triggerSearch
+  ]);
+
+  return (
+    <SearchContext.Provider value={value}>
+      {children}
+    </SearchContext.Provider>
+  );
+};
+
+export default SearchContext;

@@ -1,0 +1,207 @@
+/* Wall List / Movie Catalog Styles */
+.movie-wall-page {
+  min-height: 100vh;
+  padding: 1.5rem 2.5rem 4rem;
+  max-width: 1680px;
+  margin: 0 auto;
+}
+
+.movie-wall-header {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.movie-wall-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 1.2rem;
+}
+
+.movie-wall-heading {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.movie-wall-badge {
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.movie-wall-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wall-sort-select {
+  background-color: var(--surface-dark, #161a23);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.wall-sort-select:focus {
+  border-color: #38bdf8;
+}
+
+.wall-view-toggle {
+  display: flex;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.wall-view-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.wall-view-btn.active {
+  background: #38bdf8;
+  color: #0b0d14;
+}
+
+/* Genre Filter Pills */
+.genre-pills-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0 8px;
+  scrollbar-width: thin;
+}
+
+.genre-pills-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.genre-pills-bar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.genre-pill {
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.genre-pill:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.genre-pill.active {
+  background: #38bdf8;
+  color: #0b0d14;
+  border-color: #38bdf8;
+  font-weight: 700;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+}
+
+/* Wall Grid Display */
+.wall-movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+/* Load More Button */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 0 1rem;
+}
+
+.load-more-btn {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 12px 36px;
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.25s ease;
+}
+
+.load-more-btn:hover:not(:disabled) {
+  background: #38bdf8;
+  color: #0b0d14;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(56, 189, 248, 0.45);
+}
+
+.load-more-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Rows View */
+.wall-category-section {
+  margin-bottom: 2.5rem;
+}
+
+.wall-category-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #ffffff;
+  border-left: 4px solid #38bdf8;
+  padding-left: 12px;
+}
+
+@media (max-width: 768px) {
+  .movie-wall-page {
+    padding: 1rem 1rem 3rem;
+  }
+
+  .movie-wall-heading {
+    font-size: 1.6rem;
+  }
+
+  .wall-movies-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.85rem;
+  }
+}

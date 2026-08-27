@@ -1,57 +1,117 @@
 .embla {
   position: relative;
   width: 100%;
-  margin: auto;
+  margin: 0 auto;
 }
 
 .embla__viewport {
   overflow: hidden;
   width: 100%;
+  padding: 12px 0;
 }
 
 .embla__container {
   display: flex;
+  gap: 12px;
   will-change: transform;
+  user-select: none;
 }
 
+/* Larghezze slide responsive deterministiche per uno scroll fluido e uniforme */
 .embla__slide {
-  flex: 0 0 auto;
-  margin-right: 16px;
+  flex: 0 0 calc((100% - 5 * 12px) / 6);
+  min-width: 0;
+  position: relative;
 }
 
-/* ----- Buttons ----- */
-.embla__button {
+@media (max-width: 1500px) {
+  .embla__slide {
+    flex: 0 0 calc((100% - 4 * 12px) / 5);
+  }
+}
+
+@media (max-width: 1150px) {
+  .embla__slide {
+    flex: 0 0 calc((100% - 3 * 12px) / 4);
+  }
+}
+
+@media (max-width: 850px) {
+  .embla__slide {
+    flex: 0 0 calc((100% - 2 * 10px) / 3);
+  }
+}
+
+@media (max-width: 600px) {
+  .embla__slide {
+    flex: 0 0 calc((100% - 10px) / 2.2);
+  }
+}
+
+/* Paddle di scorrimento laterali a tutta altezza stile Netflix */
+.embla__paddle {
   position: absolute;
-  top: 50%;
-  z-index: 10;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
+  top: 12px;
+  bottom: 12px;
+  width: 48px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
-  color: white;
-  font-size: 32px;
-  padding: 8px 12px;
+  color: #ffffff;
   cursor: pointer;
-  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.25s ease, background 0.2s ease, transform 0.15s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
-.embla__button--prev {
-  left: 10px;
+.embla:hover .embla__paddle {
+  opacity: 1;
 }
 
-.embla__button--next {
-  right: 10px;
+.embla__paddle:hover {
+  color: var(--primary-color, #38bdf8);
 }
 
-.embla__button:hover {
-  background: rgba(0,0,0,0.7);
+.embla__paddle--prev {
+  left: 0;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  background: linear-gradient(90deg, rgba(11, 13, 18, 0.95) 0%, rgba(11, 13, 18, 0.6) 60%, rgba(11, 13, 18, 0) 100%);
 }
 
-@media (max-width: 768px){
-  .embla__button {
+.embla__paddle--next {
+  right: 0;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  background: linear-gradient(270deg, rgba(11, 13, 18, 0.95) 0%, rgba(11, 13, 18, 0.6) 60%, rgba(11, 13, 18, 0) 100%);
+}
+
+.embla__paddle:disabled {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.embla__paddle svg {
+  width: 28px;
+  height: 28px;
+  fill: currentColor;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+  transition: transform 0.2s ease;
+}
+
+.embla__paddle:hover svg {
+  transform: scale(1.25);
+}
+
+@media (max-width: 768px) {
+  .embla__paddle {
     display: none;
   }
 
-  .embla__container {
-    padding: 10px;
+  .embla__viewport {
+    padding: 8px 0;
   }
 }

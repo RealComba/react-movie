@@ -1,58 +1,112 @@
-import "../css/MovieCard.css"
-import { useMovieContext } from "../contexts/MovieContext"
+import "../css/MovieCard.css";
+import { useMovieContext } from "../contexts/MovieContext";
 import { useNavigate } from "react-router-dom";
-import { getSeriesById } from "../services/api"
 
+function MediaCard({ media, onOpenDetails }) {
+    const navigate = useNavigate();
+    const { isFavorite, toggleFavorite, isLiked, toggleLike } = useMovieContext();
 
-function MediaCard({ media }) {
-    const navigate = useNavigate()
-    const { isFavorite, addToFavorites, removeFromFavorites } = useMovieContext()
+    if (!media || !media.poster_path) return null;
 
-    if (!media) return null
+    const isFav = isFavorite(media.id);
+    const liked = isLiked(media.id);
+    const mediaType = media.mediaType || (media.title ? "movie" : "tv");
+    const title = media.title || media.name;
+    const year = (media.release_date || media.first_air_date || "").slice(0, 4);
+    const matchScore = Math.max(70, Math.min(99, Math.round((media.vote_average || 7.2) * 10)));
 
-    const favorite = isFavorite(media.id)
+    const handleFavoriteClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleFavorite({ ...media, mediaType });
+    };
 
-    function onFavoriteClick(e) {
-        e.preventDefault()
-        if (favorite) removeFromFavorites(media.id)
-        else addToFavorites(media)
-    }
+    const handleLikeClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleLike({ ...media, mediaType });
+    };
 
-    function playMedia() {
-        console.log(media)
-        if (media.title) navigate(`/watch/movie/${media.id}`);
+    const handlePlayClick = (e) => {
+        e.stopPropagation();
+        navigate(`/watch/${mediaType}/${media.id}`);
+    };
 
-        else navigate(`/watch/series/${media.id}`)
-    }
+    const handleDetailsClick = (e) => {
+        e.stopPropagation();
+        if (onOpenDetails) {
+            onOpenDetails({ ...media, mediaType });
+        } else {
+            navigate(`/watch/${mediaType}/${media.id}`);
+        }
+    };
 
     return (
-        media.poster_path && (
-            <div
-                className="movie-card"
-                tabIndex="0"
-                onKeyDown={(e) => {
-                    if (e.key === 'Enter') playMedia();
-                }}
-            >
-                <div className="movie-poster">
-                    <img src={`https://image.tmdb.org/t/p/w500${media.poster_path}`} alt={media.title} />
-                    <div className="movie-overlay">
-                        <div className="overlay-content">
-                            <h3 className="font-bold">{media.title || media.name}</h3>
-                            <div className="movie-actions">
-                                <button className="btn play" title="Play" tabIndex="-1" onClick={playMedia}>▶</button>
-                                <button className={`btn favorite-btn ${favorite ? "active" : ""}`} tabIndex="-1" onClick={onFavoriteClick}>
-                                    ♥︎
-                                </button>
-                                <button className="btn details" title="Details" tabIndex="-1">ℹ</button>
-                            </div>
+        <div
+            className="movie-card"
+            onClick={handleDetailsClick}
+            tabIndex="0"
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') handleDetailsClick(e);
+            }}
+            role="button"
+            aria-label={title}
+        >
+            <div className="movie-poster">
+                <img
+                    src={`https://image.tmdb.org/t/p/w500${media.poster_path}`}
+                    alt={title}
+                    loading="lazy"
+                />
+                <div className="movie-overlay">
+                    <div className="overlay-content">
+                        <h3 className="overlay-title" title={title}>{title}</h3>
+
+                        <div className="overlay-meta">
+                            <span className="match-score">{matchScore}% Match</span>
+                            {year && <span className="meta-year">{year}</span>}
+                            <span className="badge-hd">HD</span>
+                        </div>
+
+                        <div className="movie-actions">
+                            <button
+                                type="button"
+                                className="btn play"
+                                title="Riproduci"
+                                onClick={handlePlayClick}
+                            >
+                                ▶
+                            </button>
+                            <button
+                                type="button"
+                                className={`btn favorite-btn ${isFav ? "active" : ""}`}
+                                title={isFav ? "Rimuovi dalla lista" : "Aggiungi alla lista"}
+                                onClick={handleFavoriteClick}
+                            >
+                                {isFav ? "✓" : "+"}
+                            </button>
+                            <button
+                                type="button"
+                                className={`btn like-btn ${liked ? "active" : ""}`}
+                                title={liked ? "Non mi piace più" : "Mi piace"}
+                                onClick={handleLikeClick}
+                            >
+                                {liked ? "❤️" : "🤍"}
+                            </button>
+                            <button
+                                type="button"
+                                className="btn details"
+                                title="Altre info"
+                                onClick={handleDetailsClick}
+                            >
+                                ℹ
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-        )
-
-    )
+        </div>
+    );
 }
 
-export default MediaCard
+export default MediaCard;
