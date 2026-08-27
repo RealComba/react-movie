@@ -127,17 +127,33 @@ function NavBar() {
   const totalSavedCount = favorites.length + likes.length;
 
   return (
-    <nav className={`navbar ${isScrolled ? "scrolled" : "transparent"}`}>
-      <div className="navbar-container">
-        {/* Brand / Logo */}
-        <div className="navbar-brand">
-          <Link to="/" className="brand-link">
-            <span className="brand-logo-icon">▶</span>
-            <span className="brand-text">
-              CINE<span className="brand-accent">STREAM</span>
-            </span>
-          </Link>
-        </div>
+    <>
+      {/* Top Announcement Bar come in Foto 2 */}
+      <div className="top-announcement-bar">
+        <span>
+          📢 Unisciti al nostro canale Telegram per rimanere aggiornato:{" "}
+          <a
+            href="https://t.me"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="announcement-link"
+          >
+            Clicca qui
+          </a>
+        </span>
+      </div>
+
+      <nav className={`navbar ${isScrolled ? "scrolled" : "transparent"}`}>
+        <div className="navbar-container">
+          {/* Brand / Logo ContHub (con stemma esagonale come in foto 1 & 2) */}
+          <div className="navbar-brand">
+            <Link to="/" className="brand-link">
+              <span className="brand-logo-icon hexagon">C</span>
+              <span className="brand-text">
+                Cont<span className="brand-accent">Hub</span>
+              </span>
+            </Link>
+          </div>
 
         {/* Desktop Navigation Links con Selettore Generi Evoluto */}
         <div className="navbar-links">
@@ -161,6 +177,13 @@ function NavBar() {
             className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
           >
             Serie TV
+          </NavLink>
+
+          <NavLink
+            to="/film"
+            className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
+          >
+            Archivio
           </NavLink>
 
           {/* Mega Dropdown Generi */}
@@ -310,17 +333,15 @@ function NavBar() {
             )}
           </div>
 
-          {/* User Profile Avatar with Menu */}
+          {/* Bottone Accedi / Profilo (Stile Foto 1) */}
           <div className="profile-dropdown-wrapper" ref={profileDropdownRef}>
             <button
               type="button"
-              className="profile-avatar-btn"
+              className="navbar-accedi-btn"
               onClick={() => setProfileMenuOpen((prev) => !prev)}
-              aria-label="Profilo utente"
+              aria-label="Profilo o Accedi"
             >
-              <div className="profile-avatar-inner">
-                <span>CS</span>
-              </div>
+              Accedi
             </button>
 
             {profileMenuOpen && (
@@ -428,7 +449,7 @@ function NavBar() {
           </div>
         </div>
       )}
-    </nav>
+      </nav></>
   );
 }
 

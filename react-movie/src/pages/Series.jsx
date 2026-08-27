@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import MediaCard from "../components/MediaCard";
 import EmblaCarousel from "../components/Carousel";
 import QuickDetailModal from "../components/QuickDetailModal";
+import MobileBottomSheet from "../components/MobileBottomSheet";
 import {
   getPopularSeriesPaginated,
   getTopRatedSeries,
@@ -23,6 +24,20 @@ function Series() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [selectedMedia, setSelectedMedia] = useState(null);
+  const [bottomSheetMedia, setBottomSheetMedia] = useState(null);
+
+  const handleOpenMedia = (media) => {
+    if (window.innerWidth <= 768) {
+      setBottomSheetMedia(media);
+    } else {
+      setSelectedMedia(media);
+    }
+  };
+
+  const handleOpenFullDetailsFromSheet = (media) => {
+    setBottomSheetMedia(null);
+    setSelectedMedia(media);
+  };
 
   // Categorie per le file Netflix quando selectedGenre === 'all'
   const [popularSeries, setPopularSeries] = useState([]);
@@ -197,39 +212,39 @@ function Series() {
             <>
               <div className="wall-category-section">
                 <h2 className="wall-category-title">Le Più Popolari in {selectedGenreObj.name}</h2>
-                <EmblaCarousel movies={genrePopularSeries} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={genrePopularSeries} onOpenDetails={handleOpenMedia} />
               </div>
 
               <div className="wall-category-section">
                 <h2 className="wall-category-title">Da non perdere in {selectedGenreObj.name}</h2>
-                <EmblaCarousel movies={genreTopRatedSeries} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={genreTopRatedSeries} onOpenDetails={handleOpenMedia} />
               </div>
             </>
           ) : (
             <>
               <div className="wall-category-section">
                 <h2 className="wall-category-title">Serie TV Più Popolari</h2>
-                <EmblaCarousel movies={popularSeries} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={popularSeries} onOpenDetails={handleOpenMedia} />
               </div>
 
               <div className="wall-category-section">
                 <h2 className="wall-category-title">Le Più Apprezzate dalla Critica</h2>
-                <EmblaCarousel movies={topRatedSeries} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={topRatedSeries} onOpenDetails={handleOpenMedia} />
               </div>
 
               <div className="wall-category-section">
                 <h2 className="wall-category-title">Sci-Fi & Fantasy</h2>
-                <EmblaCarousel movies={scifiSeries} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={scifiSeries} onOpenDetails={handleOpenMedia} />
               </div>
 
               <div className="wall-category-section">
                 <h2 className="wall-category-title">Crimini & Misteri</h2>
-                <EmblaCarousel movies={crimeSeries} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={crimeSeries} onOpenDetails={handleOpenMedia} />
               </div>
 
               <div className="wall-category-section">
                 <h2 className="wall-category-title">Grandi Storie & Dramma</h2>
-                <EmblaCarousel movies={dramaSeries} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={dramaSeries} onOpenDetails={handleOpenMedia} />
               </div>
             </>
           )}
@@ -246,7 +261,7 @@ function Series() {
                   <MediaCard
                     key={item.id}
                     media={item}
-                    onOpenDetails={setSelectedMedia}
+                    onOpenDetails={handleOpenMedia}
                   />
                 ))}
               </div>
@@ -265,6 +280,15 @@ function Series() {
             </>
           )}
         </div>
+      )}
+
+      {/* Mobile Bottom Sheet (Foto 2) */}
+      {bottomSheetMedia && (
+        <MobileBottomSheet
+          media={bottomSheetMedia}
+          onClose={() => setBottomSheetMedia(null)}
+          onOpenFullDetails={handleOpenFullDetailsFromSheet}
+        />
       )}
 
       {/* Quick Details Modal */}

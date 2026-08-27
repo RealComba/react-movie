@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import MediaCard from "../components/MediaCard";
 import EmblaCarousel from "../components/Carousel";
 import QuickDetailModal from "../components/QuickDetailModal";
+import MobileBottomSheet from "../components/MobileBottomSheet";
 import {
   getPopularMoviesPaginated,
   getTopRatedMovies,
@@ -25,6 +26,20 @@ function MovieList() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [selectedMedia, setSelectedMedia] = useState(null);
+  const [bottomSheetMedia, setBottomSheetMedia] = useState(null);
+
+  const handleOpenMedia = (media) => {
+    if (window.innerWidth <= 768) {
+      setBottomSheetMedia(media);
+    } else {
+      setSelectedMedia(media);
+    }
+  };
+
+  const handleOpenFullDetailsFromSheet = (media) => {
+    setBottomSheetMedia(null);
+    setSelectedMedia(media);
+  };
 
   // Dati per le file tematiche (Netflix Rows)
   const [genrePopularRows, setGenrePopularRows] = useState([]);
@@ -226,17 +241,17 @@ function MovieList() {
             <>
               <div className="wall-category-section">
                 <h2 className="wall-category-title">I Più Popolari in {selectedGenreObj.name}</h2>
-                <EmblaCarousel movies={genrePopularRows} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={genrePopularRows} onOpenDetails={handleOpenMedia} />
               </div>
 
               <div className="wall-category-section">
                 <h2 className="wall-category-title">I Più Votati dalla Critica in {selectedGenreObj.name}</h2>
-                <EmblaCarousel movies={genreTopRatedRows} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={genreTopRatedRows} onOpenDetails={handleOpenMedia} />
               </div>
 
               <div className="wall-category-section">
                 <h2 className="wall-category-title">Ultime Novità in {selectedGenreObj.name}</h2>
-                <EmblaCarousel movies={genreRecentRows} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={genreRecentRows} onOpenDetails={handleOpenMedia} />
               </div>
             </>
           ) : (
@@ -244,32 +259,32 @@ function MovieList() {
             <>
               <div className="wall-category-section">
                 <h2 className="wall-category-title">Film in Tendenza questa Settimana</h2>
-                <EmblaCarousel movies={trendingMovies} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={trendingMovies} onOpenDetails={handleOpenMedia} />
               </div>
 
               <div className="wall-category-section">
                 <h2 className="wall-category-title">I Grandi Capolavori (Top Rated)</h2>
-                <EmblaCarousel movies={topRatedMovies} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={topRatedMovies} onOpenDetails={handleOpenMedia} />
               </div>
 
               <div className="wall-category-section">
                 <h2 className="wall-category-title">Azione & Adrenalina</h2>
-                <EmblaCarousel movies={actionMovies} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={actionMovies} onOpenDetails={handleOpenMedia} />
               </div>
 
               <div className="wall-category-section">
                 <h2 className="wall-category-title">Commedie da non perdere</h2>
-                <EmblaCarousel movies={comedyMovies} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={comedyMovies} onOpenDetails={handleOpenMedia} />
               </div>
 
               <div className="wall-category-section">
                 <h2 className="wall-category-title">Fantascienza & Mondi Futuri</h2>
-                <EmblaCarousel movies={scifiMovies} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={scifiMovies} onOpenDetails={handleOpenMedia} />
               </div>
 
               <div className="wall-category-section">
                 <h2 className="wall-category-title">Brividi Horror</h2>
-                <EmblaCarousel movies={horrorMovies} onOpenDetails={setSelectedMedia} />
+                <EmblaCarousel movies={horrorMovies} onOpenDetails={handleOpenMedia} />
               </div>
             </>
           )}
@@ -286,7 +301,7 @@ function MovieList() {
                   <MediaCard
                     key={movie.id}
                     media={movie}
-                    onOpenDetails={setSelectedMedia}
+                    onOpenDetails={handleOpenMedia}
                   />
                 ))}
               </div>
@@ -307,7 +322,16 @@ function MovieList() {
         </div>
       )}
 
-      {/* Quick Details Modal */}
+      {/* Mobile Bottom Sheet (Foto 2) */}
+      {bottomSheetMedia && (
+        <MobileBottomSheet
+          media={bottomSheetMedia}
+          onClose={() => setBottomSheetMedia(null)}
+          onOpenFullDetails={handleOpenFullDetailsFromSheet}
+        />
+      )}
+
+      {/* Quick Details Modal (Desktop) */}
       {selectedMedia && (
         <QuickDetailModal
           media={selectedMedia}

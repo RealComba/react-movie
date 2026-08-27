@@ -4,6 +4,7 @@ import { EmblaCarousel } from "../components/Carousel";
 import { useSearchContext } from "../contexts/SearchContext";
 import HeroBanner from "../components/HeroBanner";
 import QuickDetailModal from "../components/QuickDetailModal";
+import MobileBottomSheet from "../components/MobileBottomSheet";
 import {
   getPopularHorrorMovies,
   getTopRatedMovies,
@@ -55,13 +56,15 @@ function Home() {
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [actionMovies, setActionMovies] = useState([]);
   const [scifiMovies, setScifiMovies] = useState([]);
+
+  // Gestione modali e bottom sheet
+  const [bottomSheetMedia, setBottomSheetMedia] = useState(null);
   const [selectedMedia, setSelectedMedia] = useState(null);
 
   // Caricamento iniziale e categorie una tantum
   useEffect(() => {
     let isSubscribed = true;
 
-    // Carica film e serie se non già presenti
     if (movies.length === 0 && !searchName) {
       loadInitialData();
     }
@@ -93,6 +96,20 @@ function Home() {
     };
   }, [loadInitialData, movies.length, searchName]);
 
+  const handleOpenMedia = (media) => {
+    // Su mobile (< 768px) apri il Bottom Sheet come in foto 2; su desktop apri il QuickDetailModal
+    if (window.innerWidth <= 768) {
+      setBottomSheetMedia(media);
+    } else {
+      setSelectedMedia(media);
+    }
+  };
+
+  const handleOpenFullDetailsFromSheet = (media) => {
+    setBottomSheetMedia(null);
+    setSelectedMedia(media);
+  };
+
   const filteredMovies = Array.isArray(movies)
     ? movies.filter((m) => (m.title || "").toLowerCase().includes(searchName.toLowerCase()))
     : [];
@@ -122,42 +139,52 @@ function Home() {
           <>
             <p className="section-title">Risultati ricerca Film</p>
             {filteredMovies.length > 0 ? (
-              <EmblaCarousel movies={filteredMovies} onOpenDetails={setSelectedMedia} />
+              <EmblaCarousel movies={filteredMovies} onOpenDetails={handleOpenMedia} />
             ) : (
               <p className="loading">Nessun film trovato per "{searchName}"</p>
             )}
 
             <p className="section-title">Risultati ricerca Serie TV</p>
             {filteredSeries.length > 0 ? (
-              <EmblaCarousel movies={filteredSeries} onOpenDetails={setSelectedMedia} />
+              <EmblaCarousel movies={filteredSeries} onOpenDetails={handleOpenMedia} />
             ) : (
               <p className="loading">Nessuna serie trovata per "{searchName}"</p>
             )}
           </>
         ) : (
           <>
-            <p className="section-title">I Film più visti del momento</p>
-            <EmblaCarousel movies={filteredMovies} onOpenDetails={setSelectedMedia} />
+            {/* Titolo identico a Foto 1 e Foto 2: "I titoli del momento" */}
+            <p className="section-title">I titoli del momento</p>
+            <EmblaCarousel movies={filteredMovies} onOpenDetails={handleOpenMedia} />
 
             <p className="section-title">I Grandi Successi (Top Rated)</p>
-            <EmblaCarousel movies={topRatedMovies} onOpenDetails={setSelectedMedia} />
+            <EmblaCarousel movies={topRatedMovies} onOpenDetails={handleOpenMedia} />
 
             <p className="section-title">Le Serie TV del momento</p>
-            <EmblaCarousel movies={filteredSeries} onOpenDetails={setSelectedMedia} />
+            <EmblaCarousel movies={filteredSeries} onOpenDetails={handleOpenMedia} />
 
             <p className="section-title">Adrenalina & Azione</p>
-            <EmblaCarousel movies={actionMovies} onOpenDetails={setSelectedMedia} />
+            <EmblaCarousel movies={actionMovies} onOpenDetails={handleOpenMedia} />
 
             <p className="section-title">Brividi Horror</p>
-            <EmblaCarousel movies={popularHorror} onOpenDetails={setSelectedMedia} />
+            <EmblaCarousel movies={popularHorror} onOpenDetails={handleOpenMedia} />
 
             <p className="section-title">Fantascienza & Avventura</p>
-            <EmblaCarousel movies={scifiMovies} onOpenDetails={setSelectedMedia} />
+            <EmblaCarousel movies={scifiMovies} onOpenDetails={handleOpenMedia} />
           </>
         )}
       </div>
 
-      {/* Quick Details Modal */}
+      {/* Mobile Bottom Sheet (Layout esatto da Foto 2) */}
+      {bottomSheetMedia && (
+        <MobileBottomSheet
+          media={bottomSheetMedia}
+          onClose={() => setBottomSheetMedia(null)}
+          onOpenFullDetails={handleOpenFullDetailsFromSheet}
+        />
+      )}
+
+      {/* Quick Details Modal (Desktop) */}
       {selectedMedia && (
         <QuickDetailModal
           media={selectedMedia}

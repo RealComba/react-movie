@@ -4,6 +4,7 @@ import "../css/Favorites.css";
 import { useMovieContext } from "../contexts/MovieContext";
 import MediaCard from "../components/MediaCard";
 import QuickDetailModal from "../components/QuickDetailModal";
+import MobileBottomSheet from "../components/MobileBottomSheet";
 import { MOVIE_GENRES } from "../services/api";
 
 function Favorites() {
@@ -12,6 +13,20 @@ function Favorites() {
   const [typeFilter, setTypeFilter] = useState("all"); // "all", "movie", "tv"
   const [selectedGenre, setSelectedGenre] = useState("all");
   const [selectedMedia, setSelectedMedia] = useState(null);
+  const [bottomSheetMedia, setBottomSheetMedia] = useState(null);
+
+  const handleOpenMedia = (media) => {
+    if (window.innerWidth <= 768) {
+      setBottomSheetMedia(media);
+    } else {
+      setSelectedMedia(media);
+    }
+  };
+
+  const handleOpenFullDetailsFromSheet = (media) => {
+    setBottomSheetMedia(null);
+    setSelectedMedia(media);
+  };
 
   // Unione dei media in base al tab
   const baseList = useMemo(() => {
@@ -142,7 +157,7 @@ function Favorites() {
             <MediaCard
               key={media.id}
               media={media}
-              onOpenDetails={setSelectedMedia}
+              onOpenDetails={handleOpenMedia}
             />
           ))}
         </div>
@@ -167,6 +182,15 @@ function Favorites() {
             Esplora il Catalogo Film
           </Link>
         </div>
+      )}
+
+      {/* Mobile Bottom Sheet (Foto 2) */}
+      {bottomSheetMedia && (
+        <MobileBottomSheet
+          media={bottomSheetMedia}
+          onClose={() => setBottomSheetMedia(null)}
+          onOpenFullDetails={handleOpenFullDetailsFromSheet}
+        />
       )}
 
       {/* Quick Details Modal */}
