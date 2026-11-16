@@ -77,6 +77,14 @@ test("remote scrolls offscreen cards, crosses rows and restores focus after Back
   await expect(page.locator('[data-focus-id="home-movies-movie-119"]')).toBeFocused();
   await page.keyboard.press("ArrowRight");
   await expect(page.locator('[data-focus-id="home-movies-movie-119"]')).toBeFocused();
+  await page.keyboard.press("ArrowUp");
+  await expect(page.locator('[data-focus-id="hero-details"]')).toBeFocused();
+  await page.keyboard.press("ArrowUp");
+  await expect(page.locator('[data-focus-id="nav-home"]')).toBeFocused();
+  await page.keyboard.press("ArrowRight");
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/film$/);
+  await expect(page.locator('[data-focus-id="filter-genre"]')).toBeFocused();
 });
 
 test("genre and year work together with only the keyboard, including reset and pagination", async ({ page }) => {

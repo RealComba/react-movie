@@ -40,7 +40,7 @@ function nextTarget(current, key, targets) {
   const from = current.getBoundingClientRect();
   const x = from.left + from.width / 2;
   const y = from.top + from.height / 2;
-  return targets.filter(node => node !== current && horizontallyVisible(node))
+  const candidates = targets.filter(node => node !== current && horizontallyVisible(node))
     .map(node => {
       const to = node.getBoundingClientRect();
       const dx = to.left + to.width / 2 - x;
@@ -51,8 +51,12 @@ function nextTarget(current, key, targets) {
       const valid = !sameRow && (forward ? distance > 8 : distance < -8);
       const score = horizontal ? Math.abs(distance) + Math.abs(cross) * 4 : Math.abs(distance) * 4 + Math.abs(cross);
       return { node, score: valid ? score : Infinity };
-    }).filter(item => Number.isFinite(item.score))
-    .sort((a, b) => a.score - b.score)[0]?.node;
+    }).filter(item => Number.isFinite(item.score));
+  // The sticky header can appear closer than the previous shelf after scrolling.
+  // Follow the content vertically before returning to the navigation above it.
+  const main = current.closest("main");
+  const content = !horizontal && main ? candidates.filter(({ node }) => main.contains(node)) : [];
+  return (content.length ? content : candidates).sort((a, b) => a.score - b.score)[0]?.node;
 }
 
 export default function useRemoteNavigation() {
