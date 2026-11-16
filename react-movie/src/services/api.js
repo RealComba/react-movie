@@ -1,134 +1,41 @@
 const API_KEY = "6053a275d4f2511beb8daefa9f6a15e6"
-const BASE_URL = "https://api.themoviedb.org/3"
+const BASE_URL = "https://api.themoviedb.org/3";
 
-export const getPopularMovies = async () => {
-    const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=it-IT`);
-    const data = await response.json()
-    return data.results
-};
-
-export const getPopularSeries = async () => {
-    const response = await fetch(`${BASE_URL}/tv/popular?api_key=${API_KEY}&language=it-IT`)
-    const data = await response.json()
-    return data.results
+async function request(path, params = {}, signal) {
+  const query = new URLSearchParams({ api_key: API_KEY, language: "it-IT", ...params });
+  const response = await fetch(`${BASE_URL}/${path}?${query}`, { signal });
+  if (!response.ok) throw new Error(`TMDB: ${response.status}`);
+  const data = await response.json();
+  if (data.success === false) throw new Error("TMDB request failed");
+  return data;
 }
 
-export const getNowPlayingMovies = async () => {
-    const response = await fetch(`${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=it-IT`)
-    const data = await response.json()
-    return data.results
+function typedResults(data, mediaType) {
+  return (data.results || []).map(media => ({ ...media, mediaType }));
 }
 
-export const getPopularHorrorMovies = async () => {
-    const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=27&sort_by=popularity.desc&language=it-IT`)
-    const data = await response.json()
-    return data.results
+export async function getHomeContent(query, signal) {
+  const types = ["movie", "tv"];
+  const pages = await Promise.all(types.map(type => request(
+    query ? `search/${type}` : `${type}/popular`,
+    query ? { query, include_adult: "false" } : {}, signal,
+  )));
+  return { movies: typedResults(pages[0], "movie"), series: typedResults(pages[1], "tv") };
 }
 
-export const getTopRatedHorrorMovies = async () => {
-    const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=27&sort_by=vote_average.desc&vote_count.gte=100&language=it-IT`)
-    const data = await response.json()
-    return data.results
+export async function getCatalog(mediaType, { genre = "all", year = "all", page = 1 } = {}, signal) {
+  const params = { sort_by: "popularity.desc", include_adult: "false", page: String(page) };
+  if (genre !== "all") params.with_genres = genre;
+  if (year !== "all") params[mediaType === "movie" ? "primary_release_year" : "first_air_date_year"] = year;
+  const data = await request(`discover/${mediaType}`, params, signal);
+  return { ...data, results: typedResults(data, mediaType) };
 }
 
-
-
-export const search = async (query) => {
-    const response1 = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
-    const data1 = await response1.json()
-    const response2 = await fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
-    const data2 = await response2.json()
-
-    // Aggiungi mediaType a ogni risultato
-    const moviesWithType = data1.results.map(m => ({ ...m, mediaType: 'movie' }))
-    const seriesWithType = data2.results.map(s => ({ ...s, mediaType: 'tv' }))
-
-    return [...moviesWithType, ...seriesWithType]
+export async function getMediaById(id, mediaType, signal) {
+  const type = mediaType === "movie" ? "movie" : "tv";
+  const media = await request(`${type}/${id}`, {}, signal);
+  return { ...media, mediaType: type };
 }
-
-
-export async function getMovieById(id) {
-    const res = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=it-IT`);
-    return res.json();
-}
-
-export async function getSeriesById(id) {
-    const res = await fetch(`${BASE_URL}/tv/${id}?api_key=${API_KEY}&language=it-IT`);
-    return res.json();
-}
-
-// ...existing code...
-
-export async function getImages(id, mediaType = 'movie') {
-    const endpoint = mediaType === 'movie' ? 'movie' : 'tv'
-    const res = await fetch(
-        `${BASE_URL}/${endpoint}/${id}/images?api_key=${API_KEY}`
-    )
-    return res.json()
-}
-
-export async function getYoutube(id, mediaType = 'movie') {
-    const endpoint = mediaType === 'movie' ? 'movie' : 'tv'
-    const res = await fetch(`${BASE_URL}/${endpoint}/${id}/videos?api_key=${API_KEY}`)
-    return res.json()
-}
-
-export const getPopularMoviesPaginated = async (page = 1) => {
-    const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=it-IT&page=${page}`);
-    const data = await response.json();
-    return data.results ? data.results.map(m => ({ ...m, mediaType: 'movie' })) : [];
-};
-
-export const getTopRatedMovies = async (page = 1) => {
-    const response = await fetch(`${BASE_URL}/movie/top_rated?api_key=${API_KEY}&language=it-IT&page=${page}`);
-    const data = await response.json();
-    return data.results ? data.results.map(m => ({ ...m, mediaType: 'movie' })) : [];
-};
-
-export const getTrendingMovies = async (timeWindow = 'week') => {
-    const response = await fetch(`${BASE_URL}/trending/movie/${timeWindow}?api_key=${API_KEY}&language=it-IT`);
-    const data = await response.json();
-    return data.results ? data.results.map(m => ({ ...m, mediaType: 'movie' })) : [];
-};
-
-export const getMoviesByGenre = async (genreId, page = 1, sortBy = 'popularity.desc') => {
-    const genreParam = genreId && genreId !== 'all' ? `&with_genres=${genreId}` : '';
-    const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&language=it-IT&sort_by=${sortBy}&page=${page}${genreParam}`);
-    const data = await response.json();
-    return data.results ? data.results.map(m => ({ ...m, mediaType: 'movie' })) : [];
-};
-
-export const getPopularSeriesPaginated = async (page = 1) => {
-    const response = await fetch(`${BASE_URL}/tv/popular?api_key=${API_KEY}&language=it-IT&page=${page}`);
-    const data = await response.json();
-    return data.results ? data.results.map(s => ({ ...s, mediaType: 'tv' })) : [];
-};
-
-export const getTopRatedSeries = async (page = 1) => {
-    const response = await fetch(`${BASE_URL}/tv/top_rated?api_key=${API_KEY}&language=it-IT&page=${page}`);
-    const data = await response.json();
-    return data.results ? data.results.map(s => ({ ...s, mediaType: 'tv' })) : [];
-};
-
-export const getSeriesByGenre = async (genreId, page = 1) => {
-    const genreParam = genreId && genreId !== 'all' ? `&with_genres=${genreId}` : '';
-    const response = await fetch(`${BASE_URL}/discover/tv?api_key=${API_KEY}&language=it-IT&sort_by=popularity.desc&page=${page}${genreParam}`);
-    const data = await response.json();
-    return data.results ? data.results.map(s => ({ ...s, mediaType: 'tv' })) : [];
-};
-
-export const getCredits = async (id, mediaType = 'movie') => {
-    const endpoint = mediaType === 'movie' ? 'movie' : 'tv';
-    const res = await fetch(`${BASE_URL}/${endpoint}/${id}/credits?api_key=${API_KEY}&language=it-IT`);
-    return res.json();
-};
-
-export const getSimilar = async (id, mediaType = 'movie') => {
-    const endpoint = mediaType === 'movie' ? 'movie' : 'tv';
-    const res = await fetch(`${BASE_URL}/${endpoint}/${id}/similar?api_key=${API_KEY}&language=it-IT`);
-    const data = await res.json();
-    return data.results ? data.results.map(item => ({ ...item, mediaType })) : [];
-};
 
 export const MOVIE_GENRES = [
     { id: 'all', name: 'Tutti' },
