@@ -4,7 +4,7 @@ Catalogo React/Vite con interfaccia responsive per telefono, desktop e TV.
 
 ## Avvio e verifiche
 
-Richiede Node.js 22 e npm.
+Richiede Node.js 24 e npm.
 
 ```sh
 cd react-movie

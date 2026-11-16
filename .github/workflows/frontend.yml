@@ -3,8 +3,6 @@ name: Frontend checks
 on:
   pull_request:
     paths: ["react-movie/**", ".github/workflows/frontend.yml"]
-  push:
-    branches: ["feat/tv-responsive-navigation"]
 
 permissions:
   contents: read
@@ -17,10 +15,10 @@ jobs:
       run:
         working-directory: react-movie
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
           cache-dependency-path: react-movie/package-lock.json
       - run: npm ci
@@ -28,8 +26,8 @@ jobs:
       - run: npm run build
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
-        if: failure()
+      - uses: actions/upload-artifact@v7.0.2
+        if: always()
         with:
           name: browser-test-results
           path: react-movie/test-results

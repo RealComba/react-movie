@@ -35,7 +35,7 @@ async function mockCatalog(page) {
 test.beforeEach(async ({ page }) => { await mockCatalog(page); });
 
 for (const [width, height] of [[320, 740], [390, 844], [768, 1024], [1280, 720], [1920, 1080]]) {
-  test(`layout and navigation remain usable at ${width}×${height}`, async ({ page }) => {
+  test(`layout and navigation remain usable at ${width}×${height}`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width, height });
     await page.goto("/");
     await expect(page.locator(".movie-card")).toHaveCount(40);
@@ -43,10 +43,13 @@ for (const [width, height] of [[320, 740], [390, 844], [768, 1024], [1280, 720],
     await expect(links).toHaveText(["Home", "Film", "Serie TV"]);
     await expect(page.getByRole("searchbox")).toBeVisible();
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
+    await page.screenshot({ path: testInfo.outputPath("home.png") });
     await links.nth(1).click();
     await expect(page.getByRole("button", { name: /Genere/ })).toBeVisible();
     await expect(page.getByRole("button", { name: /Anno Tutti/ })).toBeVisible();
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
+    await expect(page.locator(".movie-card")).toHaveCount(20);
+    await page.screenshot({ path: testInfo.outputPath("catalog.png") });
   });
 }
 
