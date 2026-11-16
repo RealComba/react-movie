@@ -1,36 +1,31 @@
+import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
-import "./css/App.css";
-import { Routes, Route, useLocation } from "react-router-dom";
-import Favorites from "./pages/Favorites";
 import NavBar from "./components/NavBar";
-import { MovieProvider } from "./contexts/MovieContext";
-import { SearchProvider } from "./contexts/SearchContext";
-import Series from "./pages/Series";
+import Catalog from "./pages/Catalog";
+import Favorites from "./pages/Favorites";
 import MediaStreaming from "./pages/MediaStreaming";
 import StreamingPage from "./pages/StreamingPage";
-import MovieList from "./pages/MovieList";
+import { MovieProvider } from "./contexts/MovieContext";
+import useRemoteNavigation from "./hooks/useRemoteNavigation";
+import "./css/App.css";
 
-function App() {
+export default function App() {
   const location = useLocation();
-  const isStreamingPlayer = location.pathname.includes("/stream");
-
-  return (
+  useRemoteNavigation();
+  return <MovieProvider>
     <div className="main-content">
-      <SearchProvider>
-        <MovieProvider>
-          {!isStreamingPlayer && <NavBar />}
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/film" element={<MovieList />} />
-            <Route path="/series" element={<Series />} />
-            <Route path="/favorites" element={<Favorites />} />
-            <Route path="/watch/:mediaType/:id" element={<MediaStreaming />} />
-            <Route path="/watch/:mediaType/:id/stream" element={<StreamingPage />} />
-          </Routes>
-        </MovieProvider>
-      </SearchProvider>
+      {!location.pathname.endsWith("/stream") && <NavBar />}
+      <main id="main">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/film" element={<Catalog key="movie" mediaType="movie" />} />
+          <Route path="/series" element={<Catalog key="tv" mediaType="tv" />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/watch/:mediaType/:id" element={<MediaStreaming key={location.pathname} />} />
+          <Route path="/watch/:mediaType/:id/stream" element={<StreamingPage key={location.pathname} />} />
+          <Route path="*" element={<div className="page status"><h1>Pagina non trovata</h1><a href="/" className="button" data-tv-focus data-focus-id="home">Torna alla Home</a></div>} />
+        </Routes>
+      </main>
     </div>
-  );
+  </MovieProvider>;
 }
-
-export default App;

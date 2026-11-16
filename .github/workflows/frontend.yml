@@ -1,0 +1,34 @@
+name: Frontend checks
+
+on:
+  pull_request:
+    paths: ["react-movie/**", ".github/workflows/frontend.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: react-movie
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: react-movie/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v7.0.2
+        if: always()
+        with:
+          name: browser-test-results
+          path: react-movie/test-results
+          retention-days: 7
